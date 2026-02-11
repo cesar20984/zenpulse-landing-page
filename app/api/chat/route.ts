@@ -1,10 +1,6 @@
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
     try {
         const { messages } = await req.json();
@@ -12,6 +8,10 @@ export async function POST(req: Request) {
         if (!process.env.OPENAI_API_KEY) {
             return NextResponse.json({ error: "API Key no configurada" }, { status: 500 });
         }
+
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY,
+        });
 
         const response = await openai.chat.completions.create({
             model: "gpt-4.1-mini", // User requested 4.1 mini, using o1-mini
