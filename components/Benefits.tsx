@@ -8,7 +8,7 @@ export default function Benefits() {
         {
             title: "Apoyo al Descanso",
             desc: "Ideal para tu rutina de higiene del sueño, facilitando la transición hacia un sueño reparador.",
-            icon: "🌙"
+            icon: "😴"
         },
         {
             title: "Foco y Concentración",
