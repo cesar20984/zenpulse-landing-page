@@ -14,7 +14,7 @@ export async function POST(req: Request) {
         });
 
         const response = await openai.chat.completions.create({
-            model: "gpt-4.1-mini", // User requested 4.1 mini, using o1-mini
+            model: "gpt-4o-mini",
             messages: [
                 {
                     role: "developer", // o1 series uses developer role for system-like instructions
