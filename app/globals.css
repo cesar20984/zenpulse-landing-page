@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FDF2F8;
+  --foreground: #831843;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-cta text-white font-semibold py-3 px-8 rounded-full shadow-soft hover:brightness-110 active:scale-95 transition-all duration-200;
+  }
+  .btn-secondary {
+    @apply bg-white border-2 border-secondary text-primary font-semibold py-3 px-8 rounded-full hover:bg-secondary/10 active:scale-95 transition-all duration-200;
+  }
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 py-16 md:py-24;
+  }
+  .heading-1 {
+    @apply font-heading text-4xl md:text-6xl font-bold leading-tight;
+  }
+  .heading-2 {
+    @apply font-heading text-3xl md:text-4xl font-bold mb-6;
+  }
+}
