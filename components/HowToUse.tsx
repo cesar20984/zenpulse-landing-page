@@ -3,8 +3,8 @@ import Image from "next/image";
 export default function HowToUse() {
     const steps = [
         {
-            title: "Poner en la muñeca",
-            desc: "Ajusta la correa de material respetuoso con la piel para que el contacto sea firme pero cómodo."
+            title: "Sostener en la palma",
+            desc: "Ajusta la correa para que el dispositivo quede firme contra el centro de tu palma."
         },
         {
             title: "Elegir Modo",
@@ -16,7 +16,7 @@ export default function HowToUse() {
         },
         {
             title: "Relájate",
-            desc: "Úsalo 15-20 min antes de dormir. La constancia es clave: úsalo por 7-10 días."
+            desc: "Úsalo 15 minutos antes de dormir. La constancia es clave: úsalo por 7-10 días."
         }
     ];
 
@@ -34,7 +34,7 @@ export default function HowToUse() {
                 </div>
 
                 <div className="flex-1 order-1 md:order-2">
-                    <h2 className="heading-2">Tu rutina de 10 minutos</h2>
+                    <h2 className="heading-2">Inicia en solo 15 minutos</h2>
                     <p className="text-xl text-text/70 mb-10">
                         Fácil de integrar en tu día a día. Sin complicaciones, solo bienestar.
                     </p>

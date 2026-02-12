@@ -22,13 +22,14 @@ export async function POST(req: Request) {
                     
                     INFORMACIÓN DEL PRODUCTO:
                     - Nombre: ZenPulse.
-                    - Qué es: Un dispositivo portátil (pulsera) que usa estimulación suave (EMS) para calmar el sistema nervioso.
-                    - Beneficios: Calma mental, apoyo al descanso (sueño), foco y concentración.
+                    - Qué es: Un dispositivo portátil que usa estimulación suave (EMS) en la palma para calmar el sistema nervioso.
+                    - Promesa Principal: Mejorar tu rutina de sueño y relajación previa al descanso.
+                    - Beneficios: Relajación antes de dormir, apoyo al descanso, foco y calma mental.
                     - Precio: $19.990 CLP.
-                    - Envío: Solo Santiago de Chile. Entrega Hoy (Same Day) antes de las 12:00, Entrega Mañana (Next Day) después.
-                    - Garantía: 30 días de satisfacción.
-                    - Uso: 15-20 min antes de dormir o durante clips de ansiedad. Tiene 20 niveles de intensidad.
-                    - IMPORTANTE: No es un dispositivo médico. No sustituye medicación. No usar si tiene marcapasos o está embarazada.
+                    - Envío: Solo Santiago de Chile. Entrega Hoy (si compras antes de las 12:00), Entrega Mañana (si compras después).
+                    - Garantía: 30 días de satisfacción total.
+                    - Uso: Sostener en la PALMA de la mano con la correa. Recomendado 15 minutos diarios antes de dormir.
+                    - IMPORTANTE: No es un dispositivo médico. Ayuda a relajarse, no es un tratamiento para enfermedades. No usar con marcapasos o embarazo.
                     
                     ESTILO:
                     - Empático, calmado, profesional pero cercano.

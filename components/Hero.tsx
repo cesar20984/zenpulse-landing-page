@@ -24,17 +24,51 @@ export default function Hero() {
                         Bienestar Tecnológico
                     </span>
                     <h1 className="heading-1 mb-6 text-text">
-                        Tu momento de calma, <span className="text-primary italic">donde sea que estés</span>
+                        Mejora tu <span className="text-primary italic">rutina de sueño</span> con ZenPulse
                     </h1>
                     <p className="text-xl text-text/80 mb-4 max-w-xl mx-auto md:mx-0">
-                        Diseñado para ayudarte a relajarte en pocos minutos mediante estimulación suave y rítmica.
+                        Dispositivo diseñado para ayudarte a relajarte antes de dormir mediante impulsos rítmicos suaves.
                     </p>
-                    <div className="mb-8 text-center md:text-left">
+                    <div className="mb-6 text-center md:text-left">
                         <span className="text-3xl font-bold text-text">$19.990</span>
                         <span className="text-sm text-text/60 ml-2">CLP</span>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    {/* Trust Block */}
+                    <div className="bg-white/50 backdrop-blur-sm border border-primary/5 rounded-2xl p-4 mb-8 text-left max-w-md mx-auto md:mx-0 shadow-sm">
+                        <div className="grid grid-cols-2 gap-4 text-[11px] uppercase tracking-wider font-bold text-text/60">
+                            <div className="flex items-center gap-2">
+                                <span className="text-emerald-500 text-base">🚚</span>
+                                <div>
+                                    <p className="text-text/90">Envío Santiago</p>
+                                    <p className="font-normal normal-case text-text/50">Entrega Hoy o Mañana</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-blue-500 text-base">💳</span>
+                                <div>
+                                    <p className="text-text/90">Pago Seguro</p>
+                                    <p className="font-normal normal-case text-text/50">Débito y Crédito</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-amber-500 text-base">🛡️</span>
+                                <div>
+                                    <p className="text-text/90">Garantía 30 días</p>
+                                    <p className="font-normal normal-case text-text/50">De satisfacción</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-primary text-base">💬</span>
+                                <div>
+                                    <p className="text-text/90">Soporte 24/7</p>
+                                    <p className="font-normal normal-case text-text/50">Vía WhatsApp</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-4">
                         <button
                             onClick={handlePurchaseClick}
                             className="btn-primary flex items-center justify-center gap-2"
@@ -45,6 +79,9 @@ export default function Hero() {
                             </svg>
                         </button>
                     </div>
+                    <p className="text-[10px] text-text/40 italic">
+                        * Se usa en la palma con su correa (no en la muñeca). Recomendado: 15 min.
+                    </p>
 
                     <SantiagoGate
                         isOpen={isGateOpen}
