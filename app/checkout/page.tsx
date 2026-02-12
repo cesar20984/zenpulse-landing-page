@@ -33,8 +33,6 @@ export default function CheckoutPage() {
             const data = await res.json();
 
             if (data.success) {
-                // In a real scenario, we would redirect to a payment gateway here
-                // For now, we'll just show a success state or redirect to a thank you page
                 alert(`¡Orden creada exitosamente! Número de orden: ${data.orderNumber}`);
                 router.push("/");
             } else {
