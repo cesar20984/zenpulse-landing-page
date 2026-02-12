@@ -25,7 +25,7 @@ export async function POST(req: Request) {
                     - Qué es: Un dispositivo portátil (pulsera) que usa estimulación suave (EMS) para calmar el sistema nervioso.
                     - Beneficios: Calma mental, apoyo al descanso (sueño), foco y concentración.
                     - Precio: $19.990 CLP.
-                    - Envío: Solo Santiago de Chile. Same day antes de las 12:00, Next day después.
+                    - Envío: Solo Santiago de Chile. Entrega Hoy (Same Day) antes de las 12:00, Entrega Mañana (Next Day) después.
                     - Garantía: 30 días de satisfacción.
                     - Uso: 15-20 min antes de dormir o durante clips de ansiedad. Tiene 20 niveles de intensidad.
                     - IMPORTANTE: No es un dispositivo médico. No sustituye medicación. No usar si tiene marcapasos o está embarazada.

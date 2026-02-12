@@ -17,8 +17,8 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300">
                 <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -30,13 +30,13 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                 </div>
 
                 <div className="space-y-4 mb-8">
-                    <div className="p-4 bg-background rounded-xl border border-primary/10">
+                    <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
                         <ul className="text-sm text-text/80 space-y-2">
                             <li className="flex items-center gap-2">
-                                <span className="text-primary">✓</span> **Same Day**: Compras antes de las 12:00 hrs.
+                                <span className="text-emerald-600 font-bold">✓ Entrega Hoy:</span> Compras antes de las 12:00 hrs.
                             </li>
                             <li className="flex items-center gap-2">
-                                <span className="text-primary">✓</span> **Next Day**: Compras después de las 12:00 hrs.
+                                <span className="text-emerald-600 font-bold">✓ Entrega Mañana:</span> Compras después de las 12:00 hrs.
                             </li>
                         </ul>
                     </div>
@@ -44,7 +44,7 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                     <label className="flex items-start gap-3 cursor-pointer group">
                         <input
                             type="checkbox"
-                            className="mt-1 w-5 h-5 rounded border-primary/20 text-primary focus:ring-primary"
+                            className="mt-1 w-5 h-5 rounded border-emerald-200 text-emerald-600 focus:ring-emerald-500"
                             checked={isChecked}
                             onChange={(e) => setIsChecked(e.target.checked)}
                         />
