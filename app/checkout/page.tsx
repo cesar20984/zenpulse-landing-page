@@ -54,7 +54,7 @@ export default function CheckoutPage() {
             {/* Header */}
             <header className="py-6 border-b border-primary/10 bg-white/50 backdrop-blur-md sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-                    <button onClick={() => router.push("/")} className="text-2xl font-bold text-text">
+                    <button type="button" onClick={() => router.push("/")} className="text-2xl font-bold text-text">
                         Zen<span className="text-primary italic">Pulse</span>
                     </button>
                     <div className="flex items-center gap-2 text-text/60 text-sm font-medium">
@@ -65,7 +65,7 @@ export default function CheckoutPage() {
             </header>
 
             <main className="max-w-5xl mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     {/* Form Section */}
                     <div className="lg:col-span-2 space-y-8">
                         <section>
@@ -190,8 +190,8 @@ export default function CheckoutPage() {
                             </div>
 
                             <button
+                                type="submit"
                                 disabled={loading}
-                                onClick={handleSubmit}
                                 className="w-full btn-primary py-4 flex items-center justify-center gap-2 group"
                             >
                                 {loading ? "Procesando..." : "Realizar Pedido"}
@@ -210,7 +210,7 @@ export default function CheckoutPage() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </main>
         </div>
     );

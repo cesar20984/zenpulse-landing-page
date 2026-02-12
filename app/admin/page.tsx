@@ -185,6 +185,7 @@ export default function AdminDashboard() {
                                 <tr>
                                     <th className="px-6 py-4">Orden</th>
                                     <th className="px-6 py-4">Cliente</th>
+                                    <th className="px-6 py-4">Producto</th>
                                     <th className="px-6 py-4">Ubicación</th>
                                     <th className="px-6 py-4">Pago</th>
                                     <th className="px-6 py-4">Estado</th>
@@ -205,14 +206,17 @@ export default function AdminDashboard() {
                                             <div className="font-medium text-sm">{order.customer.firstName} {order.customer.lastName}</div>
                                             <div className="text-xs text-text/40">{order.customer.phone}</div>
                                         </td>
+                                        <td className="px-6 py-4 text-sm">
+                                            {order.packageContents}
+                                        </td>
                                         <td className="px-6 py-4">
                                             <div className="text-sm">{order.address.comuna}</div>
                                             <div className="text-xs text-text/40 truncate max-w-[150px]">{order.address.streetAddress}</div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${order.paymentStatus === 'paid'
-                                                    ? 'bg-emerald-100 text-emerald-700'
-                                                    : 'bg-amber-100 text-amber-700'
+                                                ? 'bg-emerald-100 text-emerald-700'
+                                                : 'bg-amber-100 text-amber-700'
                                                 }`}>
                                                 {order.paymentStatus === 'paid' ? 'Pagado' : 'Pendiente'}
                                             </span>

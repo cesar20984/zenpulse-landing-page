@@ -17,6 +17,14 @@ export async function POST(req: Request) {
             siteId
         } = body;
 
+        // 0. Basic Validation
+        if (!firstName || !lastName || !phone || !streetAddress || !comuna) {
+            return NextResponse.json(
+                { success: false, error: 'Faltan campos obligatorios' },
+                { status: 400 }
+            );
+        }
+
         // 1. Create or Update Customer
         // Upsert by phone (and email if provided)
         const customer = await prisma.customer.upsert({
@@ -54,7 +62,7 @@ export async function POST(req: Request) {
                 packagePieces: parseInt(packagePieces) || 1,
                 paymentStatus: 'pending',
                 fulfillmentStatus: 'new',
-                orderNumber: `ZP-${Math.floor(100000 + Math.random() * 900000)}`,
+                orderNumber: new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14),
             },
         });
 
