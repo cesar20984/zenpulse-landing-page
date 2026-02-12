@@ -12,7 +12,8 @@ import {
     Search,
     RefreshCw,
     LogOut,
-    Eye
+    Eye,
+    Trash2
 } from "lucide-react";
 
 interface Order {
@@ -227,12 +228,20 @@ export default function AdminDashboard() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => setSelectedOrder(order)}
-                                                className="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors"
-                                            >
-                                                <Eye className="w-5 h-5" />
-                                            </button>
+                                            <div className="flex justify-end gap-2">
+                                                <button
+                                                    onClick={() => setSelectedOrder(order)}
+                                                    className="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors"
+                                                >
+                                                    <Eye className="w-5 h-5" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(order.id)}
+                                                    className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors"
+                                                >
+                                                    <Trash2 className="w-5 h-5" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -298,7 +307,14 @@ export default function AdminDashboard() {
 
                             <div className="mt-8 flex gap-4">
                                 <button className="flex-1 btn-primary py-4">Imprimir Etiqueta</button>
-                                <button className="px-6 py-4 border border-primary/10 rounded-2xl font-bold hover:bg-slate-50 transition-colors">Cerrar</button>
+                                <button
+                                    onClick={() => handleDelete(selectedOrder.id)}
+                                    className="px-6 py-4 border border-red-100 text-red-500 rounded-2xl font-bold hover:bg-red-50 transition-colors flex items-center gap-2"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                    Eliminar
+                                </button>
+                                <button onClick={() => setSelectedOrder(null)} className="px-6 py-4 border border-primary/10 rounded-2xl font-bold hover:bg-slate-50 transition-colors">Cerrar</button>
                             </div>
                         </div>
                     </div>
