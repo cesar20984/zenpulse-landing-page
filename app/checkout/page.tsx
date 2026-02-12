@@ -144,32 +144,6 @@ export default function CheckoutPage() {
                                         placeholder="Calle, número, depto/casa"
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-text/70 mb-1">Comuna</label>
-                                        <input
-                                            required
-                                            type="text"
-                                            name="comuna"
-                                            value={formData.comuna}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-3 rounded-xl border border-primary/10"
-                                            placeholder="Providencia, Las Condes, etc."
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-text/70 mb-1">Cantidad de Bultos</label>
-                                        <input
-                                            required
-                                            type="number"
-                                            name="packagePieces"
-                                            value={formData.packagePieces}
-                                            onChange={handleChange}
-                                            min="1"
-                                            className="w-full px-4 py-3 rounded-xl border border-primary/10"
-                                        />
-                                    </div>
-                                </div>
                                 <div>
                                     <label className="block text-sm font-medium text-text/70 mb-1">Indicaciones Adicionales</label>
                                     <textarea
@@ -191,43 +165,41 @@ export default function CheckoutPage() {
                             <h3 className="text-xl font-bold text-text mb-6 pb-6 border-b border-primary/5">Resumen de Orden</h3>
 
                             <div className="space-y-4 mb-8">
-                                <div className="flex justify-between items-center text-text/70">
-                                    <span>ZenPulse EMS x{formData.packagePieces}</span>
-                                    <span className="font-bold text-text">${(19990 * parseInt(formData.packagePieces || "1")).toLocaleString('es-CL')}</span>
-                                </div>
-                                <div className="flex justify-between items-center text-text/70">
-                                    <span>Envío Santiago</span>
-                                    <span className="text-emerald-500 font-bold uppercase text-xs">Gratis</span>
-                                </div>
-                                <div className="pt-4 border-t border-primary/5 flex justify-between items-center text-xl font-bold text-text">
-                                    <span>Total</span>
-                                    <span className="text-primary text-2xl">${(19990 * parseInt(formData.packagePieces || "1")).toLocaleString('es-CL')}</span>
-                                </div>
+                                <span>ZenPulse Wellness Device</span>
+                                <span className="font-bold text-text">$19.990</span>
                             </div>
-
-                            <button
-                                disabled={loading}
-                                onClick={handleSubmit}
-                                className="w-full btn-primary py-4 flex items-center justify-center gap-2 group"
-                            >
-                                {loading ? "Procesando..." : "Realizar Pedido"}
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </button>
-
-                            <div className="mt-8 space-y-4">
-                                <div className="flex items-center gap-3 text-sm text-text/60">
-                                    <Truck className="w-5 h-5 text-primary" />
-                                    <span>Entrega hoy (antes 12:00)</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-sm text-text/60">
-                                    <CreditCard className="w-5 h-5 text-primary" />
-                                    <span>Paga con débito o crédito</span>
-                                </div>
+                            <div className="flex justify-between items-center text-text/70">
+                                <span>Envío Santiago</span>
+                                <span className="text-emerald-500 font-bold uppercase text-xs">Gratis</span>
                             </div>
+                            <span>Total</span>
+                            <span className="text-primary text-2xl">$19.990</span>
+                        </div>
+                    </div>
+
+                    <button
+                        disabled={loading}
+                        onClick={handleSubmit}
+                        className="w-full btn-primary py-4 flex items-center justify-center gap-2 group"
+                    >
+                        {loading ? "Procesando..." : "Realizar Pedido"}
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+
+                    <div className="mt-8 space-y-4">
+                        <div className="flex items-center gap-3 text-sm text-text/60">
+                            <Truck className="w-5 h-5 text-primary" />
+                            <span>Entrega hoy (antes 12:00)</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-text/60">
+                            <CreditCard className="w-5 h-5 text-primary" />
+                            <span>Paga con débito o crédito</span>
                         </div>
                     </div>
                 </div>
-            </main>
         </div>
+                </div >
+            </main >
+        </div >
     );
 }
