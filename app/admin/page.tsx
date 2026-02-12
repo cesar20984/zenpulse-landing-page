@@ -44,6 +44,24 @@ export default function AdminDashboard() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
+    // Load token from localStorage on mount
+    useEffect(() => {
+        const savedToken = localStorage.getItem("zenpulse_admin_token");
+        const savedTime = localStorage.getItem("zenpulse_admin_token_time");
+
+        if (savedToken && savedTime) {
+            const now = new Date().getTime();
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+
+            if (now - parseInt(savedTime) < twentyFourHours) {
+                setToken(savedToken);
+                fetchOrders(savedToken);
+            } else {
+                handleLogout();
+            }
+        }
+    }, []);
+
     const fetchOrders = async (providedToken = token) => {
         setLoading(true);
         try {
@@ -54,9 +72,12 @@ export default function AdminDashboard() {
                 const data = await res.json();
                 setOrders(data);
                 setIsAuthenticated(true);
+                // Save token and timestamp
+                localStorage.setItem("zenpulse_admin_token", providedToken);
+                localStorage.setItem("zenpulse_admin_token_time", new Date().getTime().toString());
             } else {
                 if (isAuthenticated) alert("Sesión expirada o token inválido");
-                setIsAuthenticated(false);
+                handleLogout();
             }
         } catch (error) {
             console.error("Error fetching orders:", error);
@@ -89,7 +110,14 @@ export default function AdminDashboard() {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        fetchOrders();
+        fetchOrders(token);
+    };
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        setToken("");
+        localStorage.removeItem("zenpulse_admin_token");
+        localStorage.removeItem("zenpulse_admin_token_time");
     };
 
     const filteredOrders = orders.filter(o =>
@@ -146,7 +174,7 @@ export default function AdminDashboard() {
                             <RefreshCw className={`w-5 h-5 text-text/60 ${loading ? 'animate-spin' : ''}`} />
                         </button>
                         <button
-                            onClick={() => setIsAuthenticated(false)}
+                            onClick={handleLogout}
                             className="flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium"
                         >
                             <LogOut className="w-4 h-4" />
