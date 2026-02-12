@@ -5,7 +5,7 @@ export default function StickyCTA() {
     const [isGateOpen, setIsGateOpen] = useState(false);
 
     const handleConfirmSantiago = () => {
-        window.location.href = "https://articulo.mercadolibre.cl/MLC-2858770728-dispositivo-portatil-aliviar-estres-ansiedad-insomni";
+        window.location.href = "/checkout";
     };
 
     return (

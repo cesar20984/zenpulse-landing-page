@@ -11,7 +11,7 @@ export default function Hero() {
     };
 
     const handleConfirmSantiago = () => {
-        window.location.href = "https://articulo.mercadolibre.cl/MLC-2858770728-dispositivo-portatil-aliviar-estres-ansiedad-insomni";
+        window.location.href = "/checkout";
     };
     return (
         <section className="relative overflow-hidden bg-background pt-20 pb-16 md:pt-32 md:pb-24">
