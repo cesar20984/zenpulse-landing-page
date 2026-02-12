@@ -1,5 +1,10 @@
-import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
+
+// Initialize Mercado Pago
+const client = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN || ''
+});
 
 export async function POST(req: Request) {
     try {
@@ -66,10 +71,37 @@ export async function POST(req: Request) {
             },
         });
 
+        // 4. Create Mercado Pago Preference
+        const preference = new Preference(client);
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+        const preferenceResult = await preference.create({
+            body: {
+                items: [
+                    {
+                        id: order.id,
+                        title: order.packageContents,
+                        unit_price: 19990,
+                        quantity: 1,
+                        currency_id: 'CLP',
+                    }
+                ],
+                back_urls: {
+                    success: `${baseUrl}/payment/success`,
+                    failure: `${baseUrl}/payment/failure`,
+                    pending: `${baseUrl}/payment/pending`,
+                },
+                auto_return: 'approved',
+                external_reference: order.orderNumber || order.id,
+                notification_url: `${baseUrl}/api/webhooks/mercadopago`,
+            }
+        });
+
         return NextResponse.json({
             success: true,
             orderId: order.id,
-            orderNumber: order.orderNumber
+            orderNumber: order.orderNumber,
+            initPoint: preferenceResult.init_point
         });
 
     } catch (error: any) {

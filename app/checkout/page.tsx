@@ -32,7 +32,10 @@ export default function CheckoutPage() {
 
             const data = await res.json();
 
-            if (data.success) {
+            if (data.success && data.initPoint) {
+                // Redirect to Mercado Pago
+                window.location.href = data.initPoint;
+            } else if (data.success) {
                 alert(`¡Orden creada exitosamente! Número de orden: ${data.orderNumber}`);
                 router.push("/");
             } else {
