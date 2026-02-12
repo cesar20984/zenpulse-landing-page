@@ -65,6 +65,28 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleDelete = async (id: string) => {
+        if (!confirm("¿Estás seguro de que quieres eliminar esta orden? Esta acción no se puede deshacer.")) return;
+
+        try {
+            const res = await fetch(`/api/admin/orders/delete?id=${id}`, {
+                method: "DELETE",
+                headers: { "x-admin-token": token },
+            });
+            if (res.ok) {
+                setOrders(orders.filter(o => o.id !== id));
+                if (selectedOrder?.id === id) {
+                    setSelectedOrder(null);
+                }
+            } else {
+                alert("Error al eliminar la orden");
+            }
+        } catch (error) {
+            console.error("Error deleting order:", error);
+            alert("Error de conexión");
+        }
+    };
+
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         fetchOrders();
