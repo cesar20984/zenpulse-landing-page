@@ -108,6 +108,31 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleUpdateStatus = async (id: string, newStatus: string) => {
+        try {
+            const res = await fetch("/api/admin/orders/status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-admin-token": token
+                },
+                body: JSON.stringify({ id, status: newStatus }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setOrders(orders.map(o => o.id === id ? { ...o, fulfillmentStatus: newStatus } : o));
+                if (selectedOrder?.id === id) {
+                    setSelectedOrder({ ...selectedOrder, fulfillmentStatus: newStatus });
+                }
+            } else {
+                alert("Error al actualizar el estado");
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert("Error de conexión");
+        }
+    };
+
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         fetchOrders(token);
@@ -356,7 +381,24 @@ export default function AdminDashboard() {
                             </div>
 
                             <div className="mt-8 flex gap-4">
-                                <button className="flex-1 btn-primary py-4">Imprimir Etiqueta</button>
+                                {selectedOrder.fulfillmentStatus !== 'shipped' && (
+                                    <button
+                                        onClick={() => handleUpdateStatus(selectedOrder.id, 'shipped')}
+                                        className="flex-1 btn-primary py-4 flex items-center justify-center gap-2"
+                                    >
+                                        <ShoppingBag className="w-5 h-5" />
+                                        Marcar como Enviado
+                                    </button>
+                                )}
+                                {selectedOrder.fulfillmentStatus === 'shipped' && (
+                                    <button
+                                        disabled
+                                        className="flex-1 bg-emerald-50 text-emerald-600 border border-emerald-100 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-not-allowed"
+                                    >
+                                        <CheckCircle2 className="w-5 h-5" />
+                                        Enviado
+                                    </button>
+                                )}
                                 <button
                                     onClick={() => handleDelete(selectedOrder.id)}
                                     className="px-6 py-4 border border-red-100 text-red-500 rounded-2xl font-bold hover:bg-red-50 transition-colors flex items-center gap-2"
