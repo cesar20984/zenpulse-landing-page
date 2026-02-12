@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     } catch (error: any) {
         console.error('Checkout Error:', error);
         return NextResponse.json(
-            { success: false, error: 'Error al procesar el checkout' },
+            { success: false, error: error.message || 'Error al procesar el checkout' },
             { status: 500 }
         );
     }
