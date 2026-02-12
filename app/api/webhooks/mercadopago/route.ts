@@ -39,8 +39,10 @@ export async function POST(req: Request) {
 
                     if (order) {
                         // Determine order status based on MP status
-                        let paymentStatus: 'pending' | 'paid' | 'rejected' = 'pending';
+                        let paymentStatus: 'pending' | 'paid' | 'rejected' | 'refunded' | 'charged_back' = 'pending';
                         if (status === 'approved') paymentStatus = 'paid';
+                        if (status === 'refunded') paymentStatus = 'refunded';
+                        if (status === 'charged_back') paymentStatus = 'charged_back';
                         if (status === 'rejected' || status === 'cancelled') paymentStatus = 'rejected';
 
                         await prisma.order.update({
