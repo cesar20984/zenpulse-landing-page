@@ -120,8 +120,9 @@ export default function CheckoutPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-text/70 mb-1">Correo (Opcional)</label>
+                                    <label className="block text-sm font-medium text-text/70 mb-1">Correo electrónico <span className="text-red-400">*</span></label>
                                     <input
+                                        required
                                         type="email"
                                         name="email"
                                         value={formData.email}

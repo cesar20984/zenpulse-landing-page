@@ -29,7 +29,7 @@ export default function PrivacidadPage() {
                             <li>Nombre y apellido.</li>
                             <li>Teléfono de contacto.</li>
                             <li>Dirección de entrega (calle, número, comuna).</li>
-                            <li>Correo electrónico (opcional).</li>
+                            <li>Correo electrónico.</li>
                         </ul>
                     </section>
 
@@ -40,6 +40,7 @@ export default function PrivacidadPage() {
                         </p>
                         <ul className="mt-3 space-y-2 list-disc pl-5">
                             <li>Procesar y confirmar tu pedido.</li>
+                            <li>Enviarte la confirmación de compra y notificaciones de tu orden por correo electrónico.</li>
                             <li>Coordinar la entrega de tu producto.</li>
                             <li>Comunicarnos contigo en caso de novedades con tu envío.</li>
                         </ul>

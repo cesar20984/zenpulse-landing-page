@@ -22,6 +22,14 @@ export default function Home() {
 
     return (
         <main className="min-h-screen pb-24">
+            {/* Header */}
+            <header className="py-6 border-b border-primary/10 bg-white/50 backdrop-blur-md z-50">
+                <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                    <Link href="/" className="text-2xl font-bold text-text">
+                        Zen<span className="text-primary italic">Pulse</span>
+                    </Link>
+                </div>
+            </header>
             {/* 1) Hero */}
             <Hero />
             {/* 2) Problem identification */}
