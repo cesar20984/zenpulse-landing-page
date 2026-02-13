@@ -13,8 +13,11 @@ import {
     RefreshCw,
     LogOut,
     Eye,
-    Trash2
+    Trash2,
+    Download,
+    CheckSquare
 } from "lucide-react";
+import * as XLSX from 'xlsx';
 
 interface Order {
     id: string;
@@ -43,6 +46,54 @@ export default function AdminDashboard() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+    const toggleSelect = (id: string) => {
+        setSelectedIds(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    };
+
+    const selectAllNotShipped = () => {
+        const notShipped = filteredOrders.filter(o => o.fulfillmentStatus !== 'shipped').map(o => o.id);
+        setSelectedIds(new Set(notShipped));
+    };
+
+    const clearSelection = () => setSelectedIds(new Set());
+
+    const exportToExcel = () => {
+        const selectedOrders = orders.filter(o => selectedIds.has(o.id));
+        if (selectedOrders.length === 0) {
+            alert("Selecciona al menos una orden para exportar.");
+            return;
+        }
+
+        const data = selectedOrders.map(o => ({
+            "Nombre": o.customer.firstName,
+            "Apellido": o.customer.lastName,
+            "Teléfono": o.customer.phone,
+            "Dirección": o.address.streetAddress,
+            "Comuna": o.address.comuna,
+            "Indicaciones": o.address.instructions || "",
+            "ID Interno": o.orderNumber,
+            "Correo": o.customer.email || "",
+            "Contenido del paquete": o.packageContents,
+            "cantidad de bultos": 1,
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        ws['!cols'] = [
+            { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 15 },
+            { wch: 25 }, { wch: 18 }, { wch: 25 }, { wch: 25 }, { wch: 18 }
+        ];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Listado de Direcciones");
+        const today = new Date().toISOString().slice(0, 10);
+        XLSX.writeFile(wb, `LMT-ZenPulse-${today}.xlsx`);
+    };
 
     // Load token from localStorage on mount
     useEffect(() => {
@@ -245,16 +296,49 @@ export default function AdminDashboard() {
                 {/* Table Header / Search */}
                 <div className="bg-white rounded-3xl border border-primary/5 shadow-sm overflow-hidden">
                     <div className="p-6 border-b border-primary/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <h2 className="text-lg font-bold">Últimos Pedidos</h2>
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text/40" />
-                            <input
-                                type="text"
-                                placeholder="Buscar orden, nombre o fono..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10 pr-4 py-2 bg-slate-50 border border-primary/5 rounded-xl text-sm w-full md:w-64 outline-none focus:ring-2 focus:ring-primary/20"
-                            />
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-lg font-bold">Últimos Pedidos</h2>
+                            {selectedIds.size > 0 && (
+                                <span className="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-bold">
+                                    {selectedIds.size} seleccionadas
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={selectAllNotShipped}
+                                className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold hover:bg-amber-100 transition-colors"
+                            >
+                                <CheckSquare className="w-4 h-4" />
+                                No enviadas
+                            </button>
+                            {selectedIds.size > 0 && (
+                                <>
+                                    <button
+                                        onClick={clearSelection}
+                                        className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-200 transition-colors"
+                                    >
+                                        Limpiar
+                                    </button>
+                                    <button
+                                        onClick={exportToExcel}
+                                        className="flex items-center gap-1.5 px-4 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:bg-emerald-600 transition-colors"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                        Exportar Excel
+                                    </button>
+                                </>
+                            )}
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text/40" />
+                                <input
+                                    type="text"
+                                    placeholder="Buscar orden, nombre o fono..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-10 pr-4 py-2 bg-slate-50 border border-primary/5 rounded-xl text-sm w-full md:w-64 outline-none focus:ring-2 focus:ring-primary/20"
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -262,6 +346,20 @@ export default function AdminDashboard() {
                         <table className="w-full text-left">
                             <thead className="bg-slate-50 text-text/50 text-xs font-bold uppercase tracking-wider">
                                 <tr>
+                                    <th className="px-4 py-4 w-10">
+                                        <input
+                                            type="checkbox"
+                                            checked={filteredOrders.length > 0 && filteredOrders.every(o => selectedIds.has(o.id))}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedIds(new Set(filteredOrders.map(o => o.id)));
+                                                } else {
+                                                    clearSelection();
+                                                }
+                                            }}
+                                            className="w-4 h-4 rounded accent-primary cursor-pointer"
+                                        />
+                                    </th>
                                     <th className="px-6 py-4">Orden</th>
                                     <th className="px-6 py-4">Cliente</th>
                                     <th className="px-6 py-4">Producto</th>
@@ -273,7 +371,15 @@ export default function AdminDashboard() {
                             </thead>
                             <tbody className="divide-y divide-primary/5">
                                 {filteredOrders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-slate-50 transition-colors">
+                                    <tr key={order.id} className={`hover:bg-slate-50 transition-colors ${selectedIds.has(order.id) ? 'bg-primary/5' : ''}`}>
+                                        <td className="px-4 py-4">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedIds.has(order.id)}
+                                                onChange={() => toggleSelect(order.id)}
+                                                className="w-4 h-4 rounded accent-primary cursor-pointer"
+                                            />
+                                        </td>
                                         <td className="px-6 py-4">
                                             <div className="font-bold text-sm">#{order.orderNumber}</div>
                                             <div className="text-[10px] text-text/40 flex items-center gap-1 mt-1">
