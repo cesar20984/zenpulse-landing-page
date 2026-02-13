@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import SantiagoGate from "./SantiagoGate";
+import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
 export default function Hero() {
     const [isGateOpen, setIsGateOpen] = useState(false);
+    const [showComunas, setShowComunas] = useState(false);
 
     const handlePurchaseClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -38,8 +40,14 @@ export default function Hero() {
                             <div className="flex items-center gap-2">
                                 <span className="text-emerald-500 text-base">🚚</span>
                                 <div>
-                                    <p className="text-text/90">Entrega Hoy o Mañana</p>
-                                    <p className="font-normal normal-case text-text/50">Solo Santiago</p>
+                                    <p className="text-text/90">Envío Lun–Vie</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowComunas(!showComunas)}
+                                        className="font-normal normal-case text-primary underline underline-offset-2 hover:text-primary/80 transition-colors cursor-pointer"
+                                    >
+                                        Solo Santiago →
+                                    </button>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -65,6 +73,21 @@ export default function Hero() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Comunas dropdown */}
+                    {showComunas && (
+                        <div className="mb-6 p-4 bg-white rounded-2xl border border-primary/10 shadow-sm max-w-md mx-auto md:mx-0 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="flex justify-between items-center mb-3">
+                                <p className="text-sm font-bold text-text">Comunas con cobertura (Lun–Vie)</p>
+                                <button type="button" onClick={() => setShowComunas(false)} className="text-text/40 hover:text-text/60 text-lg">✕</button>
+                            </div>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-text/60 max-h-40 overflow-y-auto">
+                                {COMUNAS_SANTIAGO.map((c) => (
+                                    <p key={c} className="py-0.5">{c}</p>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-4">
                         <button

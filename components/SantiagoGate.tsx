@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
 interface SantiagoGateProps {
     isOpen: boolean;
@@ -10,12 +11,13 @@ interface SantiagoGateProps {
 
 export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGateProps) {
     const [isChecked, setIsChecked] = useState(false);
+    const [showComunas, setShowComunas] = useState(false);
 
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
                 <div className="text-center mb-6">
                     <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,18 +27,36 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                     </div>
                     <h3 className="text-2xl font-bold text-text mb-2">Aviso Importante de Envío</h3>
                     <p className="text-text/70">
-                        Debido a la gran demanda, actualmente solo estamos trabajando con envíos en las comunas de **Santiago de Chile**.
+                        Actualmente realizamos envíos solo a comunas de Santiago, de <strong>lunes a viernes</strong>.
                     </p>
+                    <button
+                        type="button"
+                        onClick={() => setShowComunas(!showComunas)}
+                        className="mt-2 text-primary text-sm font-semibold underline underline-offset-2 hover:text-primary/80 transition-colors"
+                    >
+                        {showComunas ? "Ocultar comunas" : "Ver comunas con cobertura"}
+                    </button>
                 </div>
+
+                {/* Comunas list */}
+                {showComunas && (
+                    <div className="mb-6 p-4 bg-emerald-50/50 rounded-xl border border-emerald-100 max-h-48 overflow-y-auto">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-text/70">
+                            {COMUNAS_SANTIAGO.map((comuna) => (
+                                <p key={comuna} className="py-0.5">{comuna}</p>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 <div className="space-y-4 mb-8">
                     <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
                         <ul className="text-sm text-text/80 space-y-2">
                             <li className="flex items-center gap-2">
-                                <span className="text-emerald-600 font-bold">✓ Entrega Hoy:</span> Compras antes de las 12:00 hrs.
+                                <span className="text-emerald-600 font-bold">✓ Entrega Hoy:</span> Compras antes de las 12:00 hrs (lunes a viernes).
                             </li>
                             <li className="flex items-center gap-2">
-                                <span className="text-emerald-600 font-bold">✓ Entrega Mañana:</span> Compras después de las 12:00 hrs.
+                                <span className="text-emerald-600 font-bold">✓ Entrega Mañana:</span> Compras después de las 12:00 hrs (lunes a viernes).
                             </li>
                         </ul>
                     </div>
@@ -49,14 +69,14 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                             onChange={(e) => setIsChecked(e.target.checked)}
                         />
                         <span className="text-sm text-text/80 select-none group-hover:text-text transition-colors">
-                            Confirmo que me encuentro en una comuna de **Santiago** y acepto las condiciones de envío.
+                            Confirmo que me encuentro en una comuna de Santiago con cobertura y acepto las condiciones de envío.
                         </span>
                     </label>
                 </div>
 
                 <div className="flex gap-3">
                     <button
-                        onClick={onClose}
+                        onClick={() => { setShowComunas(false); onClose(); }}
                         className="flex-1 px-6 py-3 rounded-xl border border-primary/20 font-medium text-text/60 hover:bg-background transition-colors"
                     >
                         Cancelar

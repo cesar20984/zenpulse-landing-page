@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Truck, CreditCard, ShieldCheck, ArrowRight } from "lucide-react";
+import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
 export default function CheckoutPage() {
     const router = useRouter();
@@ -21,6 +22,12 @@ export default function CheckoutPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!formData.comuna) {
+            alert("Por favor selecciona una comuna.");
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -33,7 +40,6 @@ export default function CheckoutPage() {
             const data = await res.json();
 
             if (data.success && data.initPoint) {
-                // Redirect to Mercado Pago
                 window.location.href = data.initPoint;
             } else if (data.success) {
                 alert(`¡Orden creada exitosamente! Número de orden: ${data.orderNumber}`);
@@ -48,7 +54,7 @@ export default function CheckoutPage() {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -132,6 +138,9 @@ export default function CheckoutPage() {
                                 <span className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm">2</span>
                                 Datos de Entrega (Santiago)
                             </h2>
+                            <p className="text-sm text-text/50 mb-4">
+                                Envíos de lunes a viernes. Entrega hoy (pedidos antes de 12:00 hrs) o mañana.
+                            </p>
                             <div className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-text/70 mb-1">Dirección Completa</label>
@@ -146,16 +155,21 @@ export default function CheckoutPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-text/70 mb-1">Comuna</label>
-                                    <input
+                                    <label className="block text-sm font-medium text-text/70 mb-1">
+                                        Comuna <span className="text-red-400">*</span>
+                                    </label>
+                                    <select
                                         required
-                                        type="text"
                                         name="comuna"
                                         value={formData.comuna}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-primary/10"
-                                        placeholder="Providencia, Las Condes, etc."
-                                    />
+                                        className="w-full px-4 py-3 rounded-xl border border-primary/10 bg-white appearance-none cursor-pointer"
+                                    >
+                                        <option value="" disabled>Selecciona tu comuna</option>
+                                        {COMUNAS_SANTIAGO.map((comuna) => (
+                                            <option key={comuna} value={comuna}>{comuna}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-text/70 mb-1">Indicaciones Adicionales</label>
@@ -204,7 +218,7 @@ export default function CheckoutPage() {
                             <div className="mt-8 space-y-4">
                                 <div className="flex items-center gap-3 text-sm text-text/60">
                                     <Truck className="w-5 h-5 text-primary" />
-                                    <span>Entrega hoy (antes 12:00)</span>
+                                    <span>Entrega Lun–Vie (hoy antes de 12:00)</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm text-text/60">
                                     <CreditCard className="w-5 h-5 text-primary" />
