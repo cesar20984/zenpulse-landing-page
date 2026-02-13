@@ -7,33 +7,29 @@ export default function FAQ() {
 
     const faqs = [
         {
-            q: "¿Qué sentiré al usarlo?",
-            a: "Sentirás micro-pulsos rítmicos y un suave cosquilleo en la palma. No debe ser doloroso; ajusta la intensidad a tu nivel de comodidad."
+            q: "¿Duele?",
+            a: "No debería. Debe sentirse suave. Ajusta la intensidad hasta que sea agradable."
         },
         {
-            q: "¿Cuándo empezaré a notar resultados?",
-            a: "Muchos usuarios sienten relajación inmediata. Para mejorar tu rutina de sueño, recomendamos el uso constante por al menos 7 a 14 días."
+            q: "¿Cuándo se nota?",
+            a: "Algunas personas sienten relajación inmediata. Para establecer una rutina, úsalo 7 a 14 días."
         },
         {
-            q: "¿Quién NO debería usar ZenPulse?",
-            a: "No recomendado para personas con marcapasos, implantes electrónicos, epilepsia, arritmias graves, embarazo o menores de 16 años."
+            q: "¿Puedo usarlo de día?",
+            a: "Sí. Úsalo en pausas cortas cuando quieras bajar revoluciones."
         },
         {
-            q: "¿Qué incluye mi compra?",
-            a: "Recibirás 1 dispositivo ZenPulse, 1 correa de sujeción ajustable, 1 cable de carga USB y el manual de instrucciones en español."
+            q: "¿Cómo se carga?",
+            a: "USB-C (cable incluido). Limpieza con paño apenas húmedo o toallita con alcohol en la superficie metálica."
         },
         {
-            q: "¿Cómo se carga y se limpia?",
-            a: "Se carga vía USB (cable incluido). Para limpiarlo, usa un paño ligeramente húmedo o una toallita con alcohol sobre la superficie metálica."
-        },
-        {
-            q: "¿Tengo garantía si no me gusta?",
-            a: "Sí, cuentas con 30 días de garantía de satisfacción. Si el producto no cumple tus expectativas, puedes solicitar la devolución."
+            q: "¿Envían fuera de Santiago?",
+            a: "Por ahora, envíos solo en Santiago."
         }
     ];
 
     return (
-        <section id="faq" className="section-container py-20">
+        <section id="faq" className="section-container py-16 md:py-20">
             <h2 className="heading-2 text-center mb-12">Preguntas Frecuentes</h2>
             <div className="max-w-3xl mx-auto space-y-4">
                 {faqs.map((faq, i) => (

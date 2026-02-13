@@ -2,12 +2,13 @@
 
 import { useRef } from "react";
 import Hero from "@/components/Hero";
+import Problem from "@/components/Problem";
 import ProductDetails from "@/components/ProductDetails";
-import Benefits from "@/components/Benefits";
 import HowToUse from "@/components/HowToUse";
+import Benefits from "@/components/Benefits";
 import Specs from "@/components/Specs";
-import FAQ from "@/components/FAQ";
 import Legal from "@/components/Legal";
+import FAQ from "@/components/FAQ";
 import StickyCTA from "@/components/StickyCTA";
 import ChatAssistant from "@/components/ChatAssistant";
 
@@ -16,25 +17,36 @@ export default function Home() {
 
     return (
         <main className="min-h-screen">
+            {/* 1) Hero */}
             <Hero />
+            {/* 2) Problem identification */}
+            <Problem />
+            {/* 3) What is / What it feels like */}
             <ProductDetails />
-            <Benefits />
+            {/* 4) How to use */}
             <HowToUse />
+            {/* 5) Benefits */}
+            <Benefits />
+            {/* 6) Safety */}
+            <Legal />
+            {/* 7) What's included + Guarantee */}
             <div className="bg-white">
                 <Specs />
+                {/* 8) FAQ */}
                 <FAQ />
             </div>
-            <Legal />
-            <footer className="bg-primary/10 py-16 text-center text-sm text-text/60">
-                <div className="max-w-7xl mx-auto px-4">
-                    <p className="text-lg font-semibold text-text mb-4 flex items-center justify-center gap-2">
-                        <span className="text-primary">🛡️</span> 30 días de garantía de satisfacción
+            {/* 9) Final CTA Footer */}
+            <footer className="bg-background py-20 text-center">
+                <div className="max-w-2xl mx-auto px-4">
+                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-text mb-4">
+                        Listo. 15 minutos. A dormir.
+                    </h2>
+                    <p className="text-text/60 mb-8">
+                        Sin complicaciones. Sin pastillas. Solo un estímulo suave y tu rutina de descanso.
                     </p>
-                    <p className="mb-6 max-w-md mx-auto">
-                        *Envíos exclusivos en Santiago de Chile. Same day para compras antes de las 12:00 hrs.
+                    <p className="text-sm text-text/40 mt-8">
+                        © {new Date().getFullYear()} ZenPulse. Todos los derechos reservados.
                     </p>
-                    <p>© {new Date().getFullYear()} ZenPulse. Todos los derechos reservados.</p>
-                    <p className="mt-2 text-xs opacity-50">Desarrollado para máxima relajación.</p>
                 </div>
             </footer>
             <StickyCTA />

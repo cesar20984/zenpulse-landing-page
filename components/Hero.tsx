@@ -13,22 +13,20 @@ export default function Hero() {
     const handleConfirmSantiago = () => {
         window.location.href = "/checkout";
     };
+
     return (
         <section className="relative overflow-hidden bg-background pt-20 pb-16 md:pt-32 md:pb-24">
-            {/* Decorative background element */}
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[600px] h-[600px] bg-secondary/20 rounded-full blur-3xl opacity-50" />
 
             <div className="section-container relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 text-center md:text-left">
-                    <span className="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-primary uppercase bg-primary/10 rounded-full">
-                        Bienestar Tecnológico
-                    </span>
                     <h1 className="heading-1 mb-6 text-text">
-                        Mejora tu <span className="text-primary italic">rutina de sueño</span> con ZenPulse
+                        Relájate antes de dormir con <span className="text-primary italic">pulsos suaves</span> en la palma
                     </h1>
                     <p className="text-xl text-text/80 mb-4 max-w-xl mx-auto md:mx-0">
-                        Dispositivo diseñado para ayudarte a relajarte antes de dormir mediante impulsos rítmicos suaves.
+                        ZenPulse es un dispositivo portátil que entrega un estímulo rítmico suave en la mano. Te ayuda a bajar revoluciones y entrar en modo descanso.
                     </p>
+
                     <div className="mb-6 text-center md:text-left">
                         <span className="text-3xl font-bold text-text">$19.990</span>
                         <span className="text-sm text-text/60 ml-2">CLP</span>
@@ -40,8 +38,8 @@ export default function Hero() {
                             <div className="flex items-center gap-2">
                                 <span className="text-emerald-500 text-base">🚚</span>
                                 <div>
-                                    <p className="text-text/90">Envío Santiago</p>
-                                    <p className="font-normal normal-case text-text/50">Entrega Hoy o Mañana</p>
+                                    <p className="text-text/90">Entrega Hoy o Mañana</p>
+                                    <p className="font-normal normal-case text-text/50">Solo Santiago</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -61,8 +59,8 @@ export default function Hero() {
                             <div className="flex items-center gap-2">
                                 <span className="text-primary text-base">💬</span>
                                 <div>
-                                    <p className="text-text/90">Soporte 24/7</p>
-                                    <p className="font-normal normal-case text-text/50">Vía WhatsApp</p>
+                                    <p className="text-text/90">Soporte</p>
+                                    <p className="font-normal normal-case text-text/50">Por WhatsApp</p>
                                 </div>
                             </div>
                         </div>
@@ -78,9 +76,17 @@ export default function Hero() {
                                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                         </button>
+                        <a
+                            href="https://wa.me/56912345678?text=Hola%2C%20quiero%20consultar%20por%20ZenPulse"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-8 py-3 border-2 border-primary/20 text-primary rounded-2xl font-bold hover:bg-primary/5 transition-colors text-center"
+                        >
+                            Consultar por WhatsApp
+                        </a>
                     </div>
-                    <p className="text-[10px] text-text/40 italic">
-                        * Se usa en la palma con su correa (no en la muñeca). Recomendado: 15 min.
+                    <p className="text-xs text-text/50 mt-2">
+                        Se usa en la palma con correa (no en la muñeca). Uso recomendado: 15 min.
                     </p>
 
                     <SantiagoGate
@@ -88,15 +94,13 @@ export default function Hero() {
                         onClose={() => setIsGateOpen(false)}
                         onConfirm={handleConfirmSantiago}
                     />
-
                 </div>
 
                 <div className="flex-1 relative">
                     <div className="relative z-10 w-full aspect-square md:aspect-auto">
-                        {/* IMG_HERO - Mapping to first image provided */}
                         <Image
                             src="/images/hero.webp"
-                            alt="Mujer durmiendo tranquilamente con ZenPulse"
+                            alt="Persona relajándose con ZenPulse antes de dormir"
                             width={800}
                             height={800}
                             priority
