@@ -60,7 +60,7 @@ export default function Hero() {
                                 <span className="text-primary text-base">💬</span>
                                 <div>
                                     <p className="text-text/90">Soporte</p>
-                                    <p className="font-normal normal-case text-text/50">Por WhatsApp</p>
+                                    <p className="font-normal normal-case text-text/50">Directo en el sitio</p>
                                 </div>
                             </div>
                         </div>
@@ -76,14 +76,6 @@ export default function Hero() {
                                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                         </button>
-                        <a
-                            href="https://wa.me/56912345678?text=Hola%2C%20quiero%20consultar%20por%20ZenPulse"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-8 py-3 border-2 border-primary/20 text-primary rounded-2xl font-bold hover:bg-primary/5 transition-colors text-center"
-                        >
-                            Consultar por WhatsApp
-                        </a>
                     </div>
                     <p className="text-xs text-text/50 mt-2">
                         Se usa en la palma con correa (no en la muñeca). Uso recomendado: 15 min.

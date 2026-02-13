@@ -15,6 +15,10 @@ import ChatAssistant from "@/components/ChatAssistant";
 export default function Home() {
     const chatRef = useRef<{ open: () => void }>(null);
 
+    const openChat = () => {
+        chatRef.current?.open();
+    };
+
     return (
         <main className="min-h-screen">
             {/* 1) Hero */}
@@ -35,6 +39,20 @@ export default function Home() {
                 {/* 8) FAQ */}
                 <FAQ />
             </div>
+
+            {/* Consult block — between FAQ and Footer */}
+            <section className="bg-background py-12">
+                <div className="max-w-2xl mx-auto px-4 text-center">
+                    <p className="text-text/70 mb-4">¿Tienes dudas sobre ZenPulse?</p>
+                    <button
+                        onClick={openChat}
+                        className="px-8 py-3 border-2 border-primary/20 text-primary rounded-2xl font-bold hover:bg-primary/5 transition-colors"
+                    >
+                        💬 Consultar
+                    </button>
+                </div>
+            </section>
+
             {/* 9) Final CTA Footer */}
             <footer className="bg-background py-20 text-center">
                 <div className="max-w-2xl mx-auto px-4">

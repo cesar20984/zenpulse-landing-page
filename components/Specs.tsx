@@ -37,7 +37,7 @@ export default function Specs() {
                             Si no te gusta, solicitas devolución dentro de 30 días.
                         </p>
                         <p className="text-sm text-text/50">
-                            Escríbenos por WhatsApp con tu número de pedido y te indicamos el proceso de devolución.
+                            Contáctanos con tu número de pedido y te indicamos el proceso de devolución.
                         </p>
                     </div>
                 </div>
