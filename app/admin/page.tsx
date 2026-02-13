@@ -109,8 +109,9 @@ export default function AdminDashboard() {
     };
 
     const handleUpdateStatus = async (id: string, newStatus: string) => {
-        const actionText = newStatus === 'shipped' ? 'marcar como ENVIADO' : 'desmarcar como enviado';
-        if (!confirm(`¿Estás seguro de que quieres ${actionText} esta orden?`)) return;
+        if (newStatus === 'new') {
+            if (!confirm(`¿Estás seguro de que quieres desmarcar esta orden como enviada?`)) return;
+        }
 
         try {
             const res = await fetch("/api/admin/orders/status", {
