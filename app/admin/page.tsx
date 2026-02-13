@@ -109,6 +109,9 @@ export default function AdminDashboard() {
     };
 
     const handleUpdateStatus = async (id: string, newStatus: string) => {
+        const actionText = newStatus === 'shipped' ? 'marcar como ENVIADO' : 'desmarcar como enviado';
+        if (!confirm(`¿Estás seguro de que quieres ${actionText} esta orden?`)) return;
+
         try {
             const res = await fetch("/api/admin/orders/status", {
                 method: "POST",
@@ -119,7 +122,6 @@ export default function AdminDashboard() {
                 body: JSON.stringify({ id, status: newStatus }),
             });
             if (res.ok) {
-                const data = await res.json();
                 setOrders(orders.map(o => o.id === id ? { ...o, fulfillmentStatus: newStatus } : o));
                 if (selectedOrder?.id === id) {
                     setSelectedOrder({ ...selectedOrder, fulfillmentStatus: newStatus });
@@ -304,6 +306,23 @@ export default function AdminDashboard() {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2">
+                                                {order.fulfillmentStatus !== 'shipped' ? (
+                                                    <button
+                                                        onClick={() => handleUpdateStatus(order.id, 'shipped')}
+                                                        title="Marcar como enviado"
+                                                        className="p-2 hover:bg-emerald-50 rounded-lg text-emerald-600 transition-colors"
+                                                    >
+                                                        <ShoppingBag className="w-5 h-5" />
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => handleUpdateStatus(order.id, 'new')}
+                                                        title="Desmarcar como enviado"
+                                                        className="p-2 hover:bg-amber-50 rounded-lg text-amber-600 transition-colors"
+                                                    >
+                                                        <RefreshCw className="w-5 h-5" />
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => setSelectedOrder(order)}
                                                     className="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors"
@@ -392,11 +411,11 @@ export default function AdminDashboard() {
                                 )}
                                 {selectedOrder.fulfillmentStatus === 'shipped' && (
                                     <button
-                                        disabled
-                                        className="flex-1 bg-emerald-50 text-emerald-600 border border-emerald-100 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-not-allowed"
+                                        onClick={() => handleUpdateStatus(selectedOrder.id, 'new')}
+                                        className="flex-1 bg-emerald-50 text-emerald-600 border border-emerald-100 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-100 transition-colors"
                                     >
                                         <CheckCircle2 className="w-5 h-5" />
-                                        Enviado
+                                        Enviado (Click para deshacer)
                                     </button>
                                 )}
                                 <button
