@@ -87,3 +87,16 @@ model Payment {
   amount            Int
   createdAt         DateTime              @default(now())
 }
+
+model EmailTemplate {
+  id             String   @id @default(uuid())
+  slug           String   @unique // e.g., 'purchase-confirmation'
+  name           String   // Human readable name
+  subject        String
+  body           String   @db.Text
+  defaultSubject String
+  defaultBody    String   @db.Text
+  placeholders   String[] // List of available placeholders for this template
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

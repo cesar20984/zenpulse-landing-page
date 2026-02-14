@@ -25,7 +25,7 @@ export default function Specs() {
                             </li>
                             <li className="flex items-center gap-3">
                                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">✓</span>
-                                Manual de instrucciones en español
+                                Manual de instrucciones
                             </li>
                         </ul>
                     </div>

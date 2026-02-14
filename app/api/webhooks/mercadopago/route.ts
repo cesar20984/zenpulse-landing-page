@@ -6,6 +6,8 @@ const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN || ''
 });
 
+import { sendEmail } from '@/lib/mail';
+
 export async function POST(req: Request) {
     console.log('--- Mercado Pago Webhook Received ---');
     try {
@@ -34,12 +36,18 @@ export async function POST(req: Request) {
 
                 if (orderNumber) {
                     const order = await prisma.order.findUnique({
-                        where: { orderNumber: orderNumber }
+                        where: { orderNumber: orderNumber },
+                        include: {
+                            customer: true,
+                            address: true
+                        }
                     });
 
                     if (order) {
                         // Determine order status based on MP status
                         let paymentStatus: 'pending' | 'paid' | 'rejected' | 'refunded' | 'charged_back' = 'pending';
+                        const isFirstApproval = status === 'approved' && order.paymentStatus !== 'paid';
+
                         if (status === 'approved') paymentStatus = 'paid';
                         if (status === 'refunded') paymentStatus = 'refunded';
                         if (status === 'charged_back') paymentStatus = 'charged_back';
@@ -62,6 +70,32 @@ export async function POST(req: Request) {
                                 amount: payment.transaction_amount || 0
                             }
                         });
+
+                        // Send Notifications on Initial Approval
+                        if (isFirstApproval) {
+                            // 1. To Customer
+                            if (order.customer.email) {
+                                await sendEmail('purchase-confirmation', order.customer.email, {
+                                    customer_name: order.customer.firstName,
+                                    order_number: order.orderNumber || order.id.slice(0, 8),
+                                    product_name: order.packageContents,
+                                    shipping_address: order.address.streetAddress,
+                                    comuna: order.address.comuna
+                                });
+                            }
+
+                            // 2. To Admin
+                            const adminEmail = process.env.ADMIN_EMAIL || 'cesar@zenpulse.cl'; // Fallback
+                            await sendEmail('admin-new-order', adminEmail, {
+                                customer_name: `${order.customer.firstName} ${order.customer.lastName}`,
+                                order_number: order.orderNumber || order.id.slice(0, 8),
+                                amount: `$${payment.transaction_amount?.toLocaleString('es-CL')}`,
+                                comuna: order.address.comuna,
+                                shipping_address: order.address.streetAddress,
+                                admin_url: `${process.env.NEXT_PUBLIC_BASE_URL}/admin`
+                            });
+                        }
+
                         console.log(`Order ${orderNumber} updated successfully.`);
                     } else {
                         console.warn(`Order ${orderNumber} not found in database. Skipping update.`);
