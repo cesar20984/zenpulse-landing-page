@@ -2,8 +2,15 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { DEFAULT_TEMPLATES } from "@/lib/email-defaults";
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(req: Request) {
     try {
+        const token = req.headers.get("x-admin-token");
+        if (token !== process.env.ADMIN_TOKEN) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         let templates = await prisma.emailTemplate.findMany({
             orderBy: { name: "asc" }
         });
@@ -30,6 +37,7 @@ export async function GET() {
 
         return NextResponse.json({ success: true, templates });
     } catch (error) {
+        console.error("Error fetching templates:", error);
         return NextResponse.json({ success: false, error: "Error fetching templates" }, { status: 500 });
     }
 }
