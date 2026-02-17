@@ -17,10 +17,21 @@ export default function EmailManager({ token }: { token: string }) {
     const [loading, setLoading] = useState(true);
     const [savingId, setSavingId] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [editSubject, setEditSubject] = useState("");
+    const [editBody, setEditBody] = useState("");
 
     useEffect(() => {
         fetchTemplates();
     }, []);
+
+    // Update editor state when selected template changes
+    useEffect(() => {
+        const template = templates.find(t => t.id === editingId);
+        if (template) {
+            setEditSubject(template.subject);
+            setEditBody(template.body);
+        }
+    }, [editingId, templates]);
 
     const fetchTemplates = async () => {
         setLoading(true);
@@ -31,7 +42,7 @@ export default function EmailManager({ token }: { token: string }) {
             const data = await res.json();
             if (data.success) {
                 setTemplates(data.templates);
-                if (data.templates.length > 0) setEditingId(data.templates[0].id);
+                if (data.templates.length > 0 && !editingId) setEditingId(data.templates[0].id);
             }
         } catch (error) {
             console.error("Error fetching templates:", error);
@@ -40,20 +51,21 @@ export default function EmailManager({ token }: { token: string }) {
         }
     };
 
-    const handleUpdate = async (id: string, subject: string, body: string) => {
-        setSavingId(id);
+    const handleUpdate = async () => {
+        if (!editingId) return;
+        setSavingId(editingId);
         try {
-            const res = await fetch(`/api/admin/emails/${id}`, {
+            const res = await fetch(`/api/admin/emails/${editingId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     "x-admin-token": token
                 },
-                body: JSON.stringify({ subject, body })
+                body: JSON.stringify({ subject: editSubject, body: editBody })
             });
             const data = await res.json();
             if (data.success) {
-                setTemplates(templates.map(t => t.id === id ? data.template : t));
+                setTemplates(templates.map(t => t.id === editingId ? data.template : t));
                 alert("Plantilla actualizada con éxito");
             }
         } catch (error) {
@@ -78,9 +90,11 @@ export default function EmailManager({ token }: { token: string }) {
             const data = await res.json();
             if (data.success) {
                 setTemplates(templates.map(t => t.id === id ? data.template : t));
+                // State update via useEffect will refresh the editor
                 alert("Plantilla restaurada");
             }
         } catch (error) {
+            console.error("Error resetting:", error);
             alert("Error al restaurar");
         } finally {
             setSavingId(null);
@@ -105,8 +119,8 @@ export default function EmailManager({ token }: { token: string }) {
                         key={t.id}
                         onClick={() => setEditingId(t.id)}
                         className={`w-full text-left px-4 py-3 rounded-xl transition-all flex items-center gap-3 ${editingId === t.id
-                                ? "bg-primary text-white shadow-lg shadow-primary/20"
-                                : "bg-white hover:bg-slate-50 text-text/70 border border-primary/5"
+                            ? "bg-primary text-white shadow-lg shadow-primary/20"
+                            : "bg-white hover:bg-slate-50 text-text/70 border border-primary/5"
                             }`}
                     >
                         <Mail className={`w-4 h-4 ${editingId === t.id ? "text-white" : "text-primary"}`} />
@@ -134,11 +148,7 @@ export default function EmailManager({ token }: { token: string }) {
                                     Volver al original
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        const subject = (document.getElementById("email-subject") as HTMLInputElement).value;
-                                        const body = (document.getElementById("email-body") as HTMLTextAreaElement).value;
-                                        handleUpdate(activeTemplate.id, subject, body);
-                                    }}
+                                    onClick={handleUpdate}
                                     disabled={savingId === activeTemplate.id}
                                     className="px-6 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg shadow-primary/20"
                                 >
@@ -152,10 +162,9 @@ export default function EmailManager({ token }: { token: string }) {
                             <div>
                                 <label className="block text-sm font-bold text-text/60 mb-2">Asunto del correo</label>
                                 <input
-                                    id="email-subject"
                                     type="text"
-                                    defaultValue={activeTemplate.subject}
-                                    key={`subject-${activeTemplate.id}`}
+                                    value={editSubject}
+                                    onChange={(e) => setEditSubject(e.target.value)}
                                     className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
                                 />
                             </div>
@@ -164,10 +173,9 @@ export default function EmailManager({ token }: { token: string }) {
                                 <div className="md:col-span-3">
                                     <label className="block text-sm font-bold text-text/60 mb-2">Cuerpo del correo</label>
                                     <textarea
-                                        id="email-body"
                                         rows={15}
-                                        defaultValue={activeTemplate.body}
-                                        key={`body-${activeTemplate.id}`}
+                                        value={editBody}
+                                        onChange={(e) => setEditBody(e.target.value)}
                                         className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-mono text-sm leading-relaxed"
                                     />
                                 </div>

@@ -17,7 +17,8 @@ import {
     Download,
     CheckSquare,
     Mail,
-    Settings
+    Settings,
+    MoreVertical
 } from "lucide-react";
 import * as XLSX from 'xlsx';
 import EmailManager from "@/components/admin/EmailManager";
@@ -53,24 +54,61 @@ export default function AdminDashboard() {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [activeTab, setActiveTab] = useState<"orders" | "emails">("orders");
     const [showEmailModal, setShowEmailModal] = useState(false);
+    const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
-    // Load token from localStorage on mount
+    // Click away to close menu
+    useEffect(() => {
+        const handleClickAway = () => setActiveMenuId(null);
+        window.addEventListener('click', handleClickAway);
+        return () => window.removeEventListener('click', handleClickAway);
+    }, []);
+
+    // Load state from localStorage on mount
     useEffect(() => {
         const savedToken = localStorage.getItem("zenpulse_admin_token");
         const savedTime = localStorage.getItem("zenpulse_admin_token_time");
+        const savedTab = localStorage.getItem("zenpulse_active_tab") as "orders" | "emails";
+
+        if (savedTab) setActiveTab(savedTab);
 
         if (savedToken && savedTime) {
-            const now = new Date().getTime();
-            const twentyFourHours = 24 * 60 * 60 * 1000;
-
-            if (now - parseInt(savedTime) < twentyFourHours) {
-                setToken(savedToken);
-                fetchOrders(savedToken);
-            } else {
+            // Check if token is older than 24h
+            const isExpired = Date.now() - parseInt(savedTime) > 24 * 60 * 60 * 1000;
+            if (isExpired) {
                 handleLogout();
+            } else {
+                setToken(savedToken);
+                setIsAuthenticated(true);
             }
         }
     }, []);
+
+    const handleSendTemplate = async (orderId: string, slug: string) => {
+        try {
+            const res = await fetch("/api/admin/orders/send-template", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-admin-token": token
+                },
+                body: JSON.stringify({ orderId, templateSlug: slug })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert("Correo enviado con éxito");
+            } else {
+                alert("Error al enviar el correo");
+            }
+        } catch (error) {
+            alert("Error de conexión");
+        }
+    };
+
+    // Save active tab when it changes
+    const handleTabChange = (tab: "orders" | "emails") => {
+        setActiveTab(tab);
+        localStorage.setItem("zenpulse_active_tab", tab);
+    };
 
     const fetchOrders = async (providedToken = token) => {
         setLoading(true);
@@ -254,14 +292,14 @@ export default function AdminDashboard() {
 
                         <div className="hidden md:flex items-center bg-slate-100 p-1 rounded-xl">
                             <button
-                                onClick={() => setActiveTab("orders")}
+                                onClick={() => handleTabChange("orders")}
                                 className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'orders' ? 'bg-white text-primary shadow-sm' : 'text-text/40 hover:text-text/60'}`}
                             >
                                 <LayoutDashboard className="w-4 h-4" />
                                 Pedidos
                             </button>
                             <button
-                                onClick={() => setActiveTab("emails")}
+                                onClick={() => handleTabChange("emails")}
                                 className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'emails' ? 'bg-white text-primary shadow-sm' : 'text-text/40 hover:text-text/60'}`}
                             >
                                 <Mail className="w-4 h-4" />
@@ -439,33 +477,75 @@ export default function AdminDashboard() {
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-right">
-                                                    <div className="flex justify-end gap-2">
-                                                        {order.fulfillmentStatus !== 'shipped' ? (
-                                                            <button
-                                                                onClick={() => handleUpdateStatus(order.id, 'shipped')}
-                                                                title="Marcar como enviado"
-                                                                className="p-2 hover:bg-emerald-50 rounded-lg text-emerald-600 transition-colors"
-                                                            >
-                                                                <ShoppingBag className="w-5 h-5" />
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                onClick={() => handleUpdateStatus(order.id, 'new')}
-                                                                title="Desmarcar como enviado"
-                                                                className="p-2 hover:bg-amber-50 rounded-lg text-amber-600 transition-colors"
-                                                            >
-                                                                <RefreshCw className="w-5 h-5" />
-                                                            </button>
-                                                        )}
+                                                    <div className="flex justify-end items-center gap-1">
                                                         <button
                                                             onClick={() => setSelectedOrder(order)}
                                                             className="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors"
+                                                            title="Ver detalles"
                                                         >
                                                             <Eye className="w-5 h-5" />
                                                         </button>
+
+                                                        <div className="relative">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setActiveMenuId(activeMenuId === order.id ? null : order.id);
+                                                                }}
+                                                                className={`p-2 rounded-lg transition-colors ${activeMenuId === order.id ? 'bg-primary text-white' : 'hover:bg-slate-100 text-text/60'}`}
+                                                                title="Opciones de correo"
+                                                            >
+                                                                <MoreVertical className="w-5 h-5" />
+                                                            </button>
+
+                                                            {activeMenuId === order.id && (
+                                                                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-primary/5 py-2 z-50 animate-in fade-in zoom-in duration-200">
+                                                                    <div className="px-4 py-2 text-[10px] font-bold text-text/30 uppercase tracking-widest border-b border-slate-50 mb-1">Enviar Correo</div>
+
+                                                                    <button
+                                                                        onClick={() => handleSendTemplate(order.id, 'purchase-confirmation')}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-text/70 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <CheckCircle2 className="w-3.5 h-3.5" /> Confirmación Compra
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleSendTemplate(order.id, 'order-shipped')}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-text/70 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <ShoppingBag className="w-3.5 h-3.5" /> Pedido Enviado
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleSendTemplate(order.id, 'order-delivered')}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-text/70 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <MapPin className="w-3.5 h-3.5" /> Pedido Entregado
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleSendTemplate(order.id, 'order-cancelled')}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-text/70 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <AlertCircle className="w-3.5 h-3.5" /> Pedido Cancelado
+                                                                    </button>
+
+                                                                    <div className="h-px bg-slate-50 my-1"></div>
+
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            setSelectedOrder(order);
+                                                                            setShowEmailModal(true);
+                                                                        }}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-bold text-primary hover:bg-primary/5 transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <Mail className="w-3.5 h-3.5" /> Correo Personalizado
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
                                                         <button
                                                             onClick={() => handleDelete(order.id)}
-                                                            className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors"
+                                                            className="p-2 hover:bg-red-50 rounded-lg text-red-400 hover:text-red-500 transition-colors"
+                                                            title="Eliminar"
                                                         >
                                                             <Trash2 className="w-5 h-5" />
                                                         </button>
