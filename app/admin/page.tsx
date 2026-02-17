@@ -23,6 +23,7 @@ import {
 import * as XLSX from 'xlsx';
 import EmailManager from "@/components/admin/EmailManager";
 import ManualEmailModal from "@/components/admin/ManualEmailModal";
+import ProductManager from "@/components/admin/ProductManager";
 
 interface Order {
     id: string;
@@ -52,7 +53,7 @@ export default function AdminDashboard() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-    const [activeTab, setActiveTab] = useState<"orders" | "emails">("orders");
+    const [activeTab, setActiveTab] = useState<"orders" | "emails" | "products">("orders");
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
@@ -67,7 +68,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const savedToken = localStorage.getItem("zenpulse_admin_token");
         const savedTime = localStorage.getItem("zenpulse_admin_token_time");
-        const savedTab = localStorage.getItem("zenpulse_active_tab") as "orders" | "emails";
+        const savedTab = localStorage.getItem("zenpulse_active_tab") as "orders" | "emails" | "products";
 
         if (savedTab) setActiveTab(savedTab);
 
@@ -105,7 +106,7 @@ export default function AdminDashboard() {
     };
 
     // Save active tab when it changes
-    const handleTabChange = (tab: "orders" | "emails") => {
+    const handleTabChange = (tab: "orders" | "emails" | "products") => {
         setActiveTab(tab);
         localStorage.setItem("zenpulse_active_tab", tab);
     };
@@ -304,6 +305,13 @@ export default function AdminDashboard() {
                             >
                                 <Mail className="w-4 h-4" />
                                 Correos
+                            </button>
+                            <button
+                                onClick={() => handleTabChange("products")}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'products' ? 'bg-white text-primary shadow-sm' : 'text-text/40 hover:text-text/60'}`}
+                            >
+                                <Settings className="w-4 h-4" />
+                                Catálogo
                             </button>
                         </div>
                     </div>
@@ -558,8 +566,10 @@ export default function AdminDashboard() {
                             </div>
                         </div>
                     </>
-                ) : (
+                ) : activeTab === "emails" ? (
                     <EmailManager token={token} />
+                ) : (
+                    <ProductManager token={token} />
                 )}
             </main>
 

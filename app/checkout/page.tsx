@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Truck, CreditCard, ShieldCheck, ArrowRight } from "lucide-react";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
@@ -8,6 +8,7 @@ import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 export default function CheckoutPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [product, setProduct] = useState<any>(null);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -19,6 +20,29 @@ export default function CheckoutPage() {
         packageContents: "ZenPulse Wellness Device",
         packagePieces: "1",
     });
+
+    const [fetchingProduct, setFetchingProduct] = useState(true);
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch("/api/products/active");
+                const data = await res.json();
+                if (data.success) {
+                    setProduct(data.product);
+                    setFormData(prev => ({
+                        ...prev,
+                        packageContents: data.product.name
+                    }));
+                }
+            } catch (error) {
+                console.error("Error fetching product:", error);
+            } finally {
+                setFetchingProduct(false);
+            }
+        };
+        fetchProduct();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,7 +88,7 @@ export default function CheckoutPage() {
             <header className="py-6 border-b border-primary/10 bg-white/50 backdrop-blur-md sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <button type="button" onClick={() => router.push("/")} className="text-2xl font-bold text-text">
-                        Zen<span className="text-primary italic">Pulse</span>
+                        {product?.name?.split(' ')[0] || 'Zen'}<span className="text-primary italic">{product?.name?.split(' ')[1] || 'Pulse'}</span>
                     </button>
                     <div className="flex items-center gap-2 text-text/60 text-sm font-medium">
                         <ShieldCheck className="w-4 h-4 text-emerald-500" />
@@ -193,9 +217,12 @@ export default function CheckoutPage() {
                             <h3 className="text-xl font-bold text-text mb-6 pb-6 border-b border-primary/5">Resumen de Orden</h3>
 
                             <div className="space-y-4 mb-8">
-                                <div className="flex justify-between items-center text-text/70">
-                                    <span>ZenPulse Wellness Device</span>
-                                    <span className="font-bold text-text">$19.990</span>
+                                <div className="flex justify-between items-start text-text/70">
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-text">{product?.name || "ZenPulse Pro"}</span>
+                                        <span className="text-xs">Dispositivo de Bienestar</span>
+                                    </div>
+                                    <span className="font-bold text-text">${(product?.price || 19990).toLocaleString('es-CL')}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-text/70">
                                     <span>Envío Santiago</span>
@@ -203,7 +230,7 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="pt-4 border-t border-primary/5 flex justify-between items-center text-xl font-bold text-text">
                                     <span>Total</span>
-                                    <span className="text-primary text-2xl">$19.990</span>
+                                    <span className="text-primary text-2xl">${(product?.price || 19990).toLocaleString('es-CL')}</span>
                                 </div>
                             </div>
 

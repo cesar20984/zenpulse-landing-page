@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SantiagoGate from "./SantiagoGate";
 
-export default function StickyCTA() {
+export default function StickyCTA({ product }: { product: any }) {
     const [isGateOpen, setIsGateOpen] = useState(false);
 
     const handleConfirmSantiago = () => {
@@ -16,7 +16,7 @@ export default function StickyCTA() {
                         onClick={() => setIsGateOpen(true)}
                         className="w-full bg-cta text-white py-4 rounded-2xl font-bold text-center active:scale-95 transition-all shadow-lg shadow-cta/20 hover:shadow-cta/40 hover:-translate-y-0.5 text-lg"
                     >
-                        Comprar Ahora — $19.990
+                        Comprar Ahora — ${product.price?.toLocaleString('es-CL')}
                     </button>
                 </div>
             </div>

@@ -31,8 +31,17 @@ export async function POST(req: Request) {
             );
         }
 
+        // Fetch first active product for pricing (or specific one if multi-product)
+        const product = await prisma.product.findFirst({
+            where: { active: true }
+        });
+
+        if (!product) {
+            return NextResponse.json({ success: false, error: 'No hay productos activos' }, { status: 400 });
+        }
+
         // 1. Create or Update Customer
-        // Upsert by phone (and email if provided)
+        // ... rest of the logic ...
         const customer = await prisma.customer.upsert({
             where: { phone: phone },
             update: {
@@ -64,7 +73,7 @@ export async function POST(req: Request) {
                 customerId: customer.id,
                 addressId: address.id,
                 siteId: siteId || 'zenpulse-chile',
-                packageContents: packageContents || 'ZenPulse Device',
+                packageContents: product.name,
                 packagePieces: parseInt(packagePieces) || 1,
                 paymentStatus: 'pending',
                 fulfillmentStatus: 'new',
@@ -81,8 +90,8 @@ export async function POST(req: Request) {
                 items: [
                     {
                         id: order.id,
-                        title: order.packageContents,
-                        unit_price: 19990,
+                        title: product.name,
+                        unit_price: product.price,
                         quantity: 1,
                         currency_id: 'CLP',
                     }

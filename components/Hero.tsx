@@ -3,7 +3,7 @@ import { useState } from "react";
 import SantiagoGate from "./SantiagoGate";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
-export default function Hero() {
+export default function Hero({ product }: { product: any }) {
     const [isGateOpen, setIsGateOpen] = useState(false);
     const [showComunas, setShowComunas] = useState(false);
 
@@ -26,12 +26,12 @@ export default function Hero() {
                         Relájate antes de dormir con <span className="text-primary italic">pulsos suaves</span> en la palma
                     </h1>
                     <p className="text-xl text-text/80 mb-4 max-w-xl mx-auto md:mx-0">
-                        ZenPulse es un dispositivo portátil que entrega un estímulo rítmico suave en la mano. Te ayuda a bajar revoluciones y entrar en modo descanso.
+                        {product.description || "ZenPulse es un dispositivo portátil que entrega un estímulo rítmico suave en la mano. Te ayuda a bajar revoluciones y entrar en modo descanso."}
                     </p>
 
                     <div className="mb-6 text-center md:text-left">
-                        <span className="text-3xl font-bold text-text">$19.990</span>
-                        <span className="text-sm text-text/60 ml-2">CLP</span>
+                        <span className="text-3xl font-bold text-text">${product.price?.toLocaleString('es-CL')}</span>
+                        <span className="text-sm text-text/60 ml-2">{product.currency || 'CLP'}</span>
                     </div>
 
                     {/* Trust Block */}
