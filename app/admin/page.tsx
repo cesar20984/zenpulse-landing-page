@@ -18,7 +18,8 @@ import {
     CheckSquare,
     Mail,
     Settings,
-    MoreVertical
+    MoreVertical,
+    Truck
 } from "lucide-react";
 import * as XLSX from 'xlsx';
 import EmailManager from "@/components/admin/EmailManager";
@@ -484,7 +485,7 @@ export default function AdminDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-primary/5">
-                                        {filteredOrders.map((order) => (
+                                        {filteredOrders.map((order, index) => (
                                             <tr key={order.id} className={`hover:bg-slate-50 transition-colors ${selectedIds.has(order.id) ? 'bg-primary/5' : ''}`}>
                                                 <td className="px-4 py-4">
                                                     <input
@@ -527,6 +528,30 @@ export default function AdminDashboard() {
                                                 </td>
                                                 <td className="px-6 py-4 text-right">
                                                     <div className="flex justify-end items-center gap-1">
+                                                        {order.fulfillmentStatus !== 'shipped' ? (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleUpdateStatus(order.id, 'shipped');
+                                                                }}
+                                                                title="Marcar como enviado"
+                                                                className="p-2 hover:bg-emerald-50 rounded-lg text-emerald-600 transition-colors"
+                                                            >
+                                                                <Truck className="w-5 h-5" />
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleUpdateStatus(order.id, 'new');
+                                                                }}
+                                                                title="Desmarcar como enviado"
+                                                                className="p-2 hover:bg-amber-50 rounded-lg text-amber-600 transition-colors"
+                                                            >
+                                                                <RefreshCw className="w-5 h-5" />
+                                                            </button>
+                                                        )}
+
                                                         <button
                                                             onClick={() => setSelectedOrder(order)}
                                                             className="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors"
@@ -548,7 +573,7 @@ export default function AdminDashboard() {
                                                             </button>
 
                                                             {activeMenuId === order.id && (
-                                                                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-primary/5 py-2 z-50 animate-in fade-in zoom-in duration-200">
+                                                                <div className={`absolute right-0 w-56 bg-white rounded-2xl shadow-xl border border-primary/5 py-2 z-50 animate-in fade-in zoom-in duration-200 ${index > filteredOrders.length - 4 && filteredOrders.length > 5 ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'}`}>
                                                                     <div className="px-4 py-2 text-[10px] font-bold text-text/30 uppercase tracking-widest border-b border-slate-50 mb-1">Enviar Correo</div>
 
                                                                     <button
