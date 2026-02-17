@@ -1,14 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL") // Descomenta si usas un Connection Pooler en Neon
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Customer {
@@ -17,22 +13,71 @@ model Customer {
   lastName  String
   email     String?   @unique
   phone     String    @unique
-  addresses Address[]
-  orders    Order[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  addresses Address[]
+  orders    Order[]
 }
 
 model Address {
   id            String   @id @default(uuid())
   customerId    String
-  customer      Customer @relation(fields: [customerId], references: [id])
   streetAddress String
   comuna        String
   instructions  String?
-  orders        Order[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  customer      Customer @relation(fields: [customerId], references: [id])
+  orders        Order[]
+}
+
+model Order {
+  id                String            @id @default(uuid())
+  orderNumber       String?           @unique
+  customerId        String
+  addressId         String
+  siteId            String
+  packageContents   String
+  packagePieces     Int               @default(1)
+  paymentStatus     PaymentStatus     @default(pending)
+  fulfillmentStatus FulfillmentStatus @default(new)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  address           Address           @relation(fields: [addressId], references: [id])
+  customer          Customer          @relation(fields: [customerId], references: [id])
+  payments          Payment[]
+}
+
+model Payment {
+  id                String                @id @default(uuid())
+  orderId           String
+  provider          String
+  providerPaymentId String                @unique
+  status            PaymentProviderStatus @default(pending)
+  amount            Int
+  createdAt         DateTime              @default(now())
+  order             Order                 @relation(fields: [orderId], references: [id])
+}
+
+model EmailTemplate {
+  id             String   @id @default(uuid())
+  slug           String   @unique
+  name           String
+  subject        String
+  body           String
+  defaultSubject String
+  defaultBody    String
+  placeholders   String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model GlobalSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum PaymentStatus {
@@ -51,23 +96,6 @@ enum FulfillmentStatus {
   cancelled
 }
 
-model Order {
-  id              String            @id @default(uuid())
-  orderNumber     String?           @unique
-  customerId      String
-  customer        Customer          @relation(fields: [customerId], references: [id])
-  addressId       String
-  address         Address           @relation(fields: [addressId], references: [id])
-  siteId          String
-  packageContents String
-  packagePieces   Int               @default(1)
-  paymentStatus   PaymentStatus     @default(pending)
-  fulfillmentStatus FulfillmentStatus @default(new)
-  payments        Payment[]
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-}
-
 enum PaymentProviderStatus {
   pending
   approved
@@ -75,36 +103,4 @@ enum PaymentProviderStatus {
   refunded
   charged_back
   cancelled
-}
-
-model Payment {
-  id                String                @id @default(uuid())
-  orderId           String
-  order             Order                 @relation(fields: [orderId], references: [id])
-  provider          String
-  providerPaymentId String                @unique
-  status            PaymentProviderStatus @default(pending)
-  amount            Int
-  createdAt         DateTime              @default(now())
-}
-
-model EmailTemplate {
-  id             String   @id @default(uuid())
-  slug           String   @unique // e.g., 'purchase-confirmation'
-  name           String   // Human readable name
-  subject        String
-  body           String   @db.Text
-  defaultSubject String
-  defaultBody    String   @db.Text
-  placeholders   String[] // List of available placeholders for this template
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
-model GlobalSetting {
-  id    String @id @default(uuid())
-  key   String @unique
-  value String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

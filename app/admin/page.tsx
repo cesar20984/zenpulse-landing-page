@@ -84,6 +84,7 @@ export default function AdminDashboard() {
             } else {
                 setToken(savedToken);
                 setIsAuthenticated(true);
+                fetchOrders(savedToken); // 🔥 Fetch orders on auto-login
             }
         }
         fetchSettings();
@@ -285,12 +286,15 @@ export default function AdminDashboard() {
         localStorage.removeItem("zenpulse_admin_token_time");
     };
 
-    const filteredOrders = orders.filter(o =>
-        o.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        o.customer.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        o.customer.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        o.customer.phone.includes(searchTerm)
-    );
+    const filteredOrders = orders.filter(o => {
+        const searchLow = searchTerm.toLowerCase();
+        return (
+            (o.orderNumber?.toLowerCase() || "").includes(searchLow) ||
+            (o.customer?.firstName?.toLowerCase() || "").includes(searchLow) ||
+            (o.customer?.lastName?.toLowerCase() || "").includes(searchLow) ||
+            (o.customer?.phone || "").includes(searchTerm)
+        );
+    });
 
     if (!isAuthenticated) {
         return (
@@ -496,22 +500,22 @@ export default function AdminDashboard() {
                                                     />
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="font-bold text-sm">#{order.orderNumber}</div>
+                                                    <div className="font-bold text-sm">#{order.orderNumber || 'N/A'}</div>
                                                     <div className="text-[10px] text-text/40 flex items-center gap-1 mt-1">
                                                         <Clock className="w-3 h-3" />
-                                                        {new Date(order.createdAt).toLocaleDateString()}
+                                                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '---'}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="font-medium text-sm">{order.customer.firstName} {order.customer.lastName}</div>
-                                                    <div className="text-xs text-text/40">{order.customer.phone}</div>
+                                                    <div className="font-medium text-sm">{order.customer?.firstName || 'Sin'} {order.customer?.lastName || 'Nombre'}</div>
+                                                    <div className="text-xs text-text/40">{order.customer?.phone || 'Sin fono'}</div>
                                                 </td>
                                                 <td className="px-6 py-4 text-sm">
-                                                    {order.packageContents}
+                                                    {order.packageContents || '---'}
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="text-sm">{order.address.comuna}</div>
-                                                    <div className="text-xs text-text/40 truncate max-w-[150px]">{order.address.streetAddress}</div>
+                                                    <div className="text-sm">{order.address?.comuna || '---'}</div>
+                                                    <div className="text-xs text-text/40 truncate max-w-[150px]">{order.address?.streetAddress || '---'}</div>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${order.paymentStatus === 'paid'
@@ -523,7 +527,7 @@ export default function AdminDashboard() {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide">
-                                                        {order.fulfillmentStatus}
+                                                        {order.fulfillmentStatus || 'new'}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-right">
@@ -590,7 +594,7 @@ export default function AdminDashboard() {
                                                                     </button>
                                                                     <button
                                                                         onClick={() => handleSendTemplate(order.id, 'order-delivered')}
-                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-text/70 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2"
+                                                                        className="px-4 py-2 text-xs font-medium text-text/70 hover:bg-primary/5 hover:text-primary transition-colors flex items-center gap-2"
                                                                     >
                                                                         <MapPin className="w-3.5 h-3.5" /> Pedido Entregado
                                                                     </button>
