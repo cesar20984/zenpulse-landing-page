@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function Specs({ product }: { product: any }) {
+export default function Specs() {
     return (
         <section id="incluye" className="section-container bg-background/20 py-16 md:py-20">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -9,11 +9,11 @@ export default function Specs({ product }: { product: any }) {
 
                     {/* What's included */}
                     <div className="p-6 bg-white rounded-2xl border border-primary/5 shadow-sm mb-6">
-                        <h3 className="font-bold text-lg text-text mb-4">Tu kit {product.name} incluye:</h3>
+                        <h3 className="font-bold text-lg text-text mb-4">Tu kit ZenPulse incluye:</h3>
                         <ul className="space-y-3 text-text/70">
                             <li className="flex items-center gap-3">
                                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">✓</span>
-                                1 dispositivo {product.name}
+                                1 dispositivo ZenPulse
                             </li>
                             <li className="flex items-center gap-3">
                                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">✓</span>

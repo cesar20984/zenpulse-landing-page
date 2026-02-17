@@ -23,7 +23,6 @@ import {
 import * as XLSX from 'xlsx';
 import EmailManager from "@/components/admin/EmailManager";
 import ManualEmailModal from "@/components/admin/ManualEmailModal";
-import ProductManager from "@/components/admin/ProductManager";
 
 interface Order {
     id: string;
@@ -53,9 +52,13 @@ export default function AdminDashboard() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-    const [activeTab, setActiveTab] = useState<"orders" | "emails" | "products">("orders");
+    const [activeTab, setActiveTab] = useState<"orders" | "emails" | "settings">("orders");
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+
+    // Settings state
+    const [price, setPrice] = useState("19990");
+    const [savingSettings, setSavingSettings] = useState(false);
 
     // Click away to close menu
     useEffect(() => {
@@ -68,7 +71,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const savedToken = localStorage.getItem("zenpulse_admin_token");
         const savedTime = localStorage.getItem("zenpulse_admin_token_time");
-        const savedTab = localStorage.getItem("zenpulse_active_tab") as "orders" | "emails" | "products";
+        const savedTab = localStorage.getItem("zenpulse_active_tab") as "orders" | "emails" | "settings";
 
         if (savedTab) setActiveTab(savedTab);
 
@@ -82,7 +85,45 @@ export default function AdminDashboard() {
                 setIsAuthenticated(true);
             }
         }
+        fetchSettings();
     }, []);
+
+    const fetchSettings = async () => {
+        try {
+            const res = await fetch("/api/admin/settings");
+            const data = await res.json();
+            if (data.success) {
+                const priceSetting = data.settings.find((s: any) => s.key === "product_price");
+                if (priceSetting) setPrice(priceSetting.value);
+            }
+        } catch (error) {
+            console.error("Error fetching settings:", error);
+        }
+    };
+
+    const handleUpdatePrice = async () => {
+        setSavingSettings(true);
+        try {
+            const res = await fetch("/api/admin/settings", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-admin-token": token
+                },
+                body: JSON.stringify({ key: "product_price", value: price })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert("Precio actualizado con éxito");
+            } else {
+                alert("Error al actualizar precio");
+            }
+        } catch (error) {
+            alert("Error de conexión");
+        } finally {
+            setSavingSettings(false);
+        }
+    };
 
     const handleSendTemplate = async (orderId: string, slug: string) => {
         try {
@@ -106,7 +147,7 @@ export default function AdminDashboard() {
     };
 
     // Save active tab when it changes
-    const handleTabChange = (tab: "orders" | "emails" | "products") => {
+    const handleTabChange = (tab: "orders" | "emails" | "settings") => {
         setActiveTab(tab);
         localStorage.setItem("zenpulse_active_tab", tab);
     };
@@ -307,11 +348,11 @@ export default function AdminDashboard() {
                                 Correos
                             </button>
                             <button
-                                onClick={() => handleTabChange("products")}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'products' ? 'bg-white text-primary shadow-sm' : 'text-text/40 hover:text-text/60'}`}
+                                onClick={() => handleTabChange("settings")}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'settings' ? 'bg-white text-primary shadow-sm' : 'text-text/40 hover:text-text/60'}`}
                             >
                                 <Settings className="w-4 h-4" />
-                                Catálogo
+                                Configuración
                             </button>
                         </div>
                     </div>
@@ -569,7 +610,52 @@ export default function AdminDashboard() {
                 ) : activeTab === "emails" ? (
                     <EmailManager token={token} />
                 ) : (
-                    <ProductManager token={token} />
+                    <div className="max-w-2xl mx-auto">
+                        <div className="bg-white rounded-3xl border border-primary/5 shadow-soft overflow-hidden">
+                            <div className="p-8 border-b border-primary/5 bg-slate-50/50">
+                                <h2 className="text-xl font-bold text-text">Configuración Global</h2>
+                                <p className="text-sm text-text/60 mt-1">Ajusta los valores principales de tu tienda.</p>
+                            </div>
+
+                            <div className="p-8 space-y-8">
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h3 className="font-bold text-text">Precio del Producto</h3>
+                                            <p className="text-xs text-text/40">Este precio se usará en la landing, checkout y Mercado Pago.</p>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-sm font-bold text-text/40">$</span>
+                                            <input
+                                                type="number"
+                                                value={price}
+                                                onChange={(e) => setPrice(e.target.value)}
+                                                className="w-32 px-4 py-2 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold text-right"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
+                                        <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+                                        <p className="text-xs text-amber-800 leading-relaxed">
+                                            <strong>Atención:</strong> Cambiar el precio afectará inmediatamente a todos los nuevos procesos de checkout. Las órdenes ya creadas mantendrán el precio con el que fueron generadas.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="pt-4">
+                                    <button
+                                        onClick={handleUpdatePrice}
+                                        disabled={savingSettings}
+                                        className="w-full btn-primary py-4 flex items-center justify-center gap-2"
+                                    >
+                                        {savingSettings ? <RefreshCw className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
+                                        Guardar Configuración
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </main>
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { sendEmail } from '@/lib/mail';
+import { getPrice } from '@/lib/settings';
 
 export async function POST(req: Request) {
     try {
@@ -27,6 +28,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Order or customer email not found' }, { status: 404 });
         }
 
+        const { formatted: priceStr } = await getPrice();
+
         // Prepare variables based on template needs
         const variables: Record<string, string> = {
             customer_name: order.customer.firstName,
@@ -34,7 +37,7 @@ export async function POST(req: Request) {
             product_name: order.packageContents,
             shipping_address: order.address.streetAddress,
             comuna: order.address.comuna,
-            amount: "$19.990", // Standard price for now
+            amount: priceStr,
             admin_url: `${process.env.NEXT_PUBLIC_BASE_URL}/admin`,
             message: "", // Empty for template trigger
         };

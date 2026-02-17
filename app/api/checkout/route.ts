@@ -31,17 +31,8 @@ export async function POST(req: Request) {
             );
         }
 
-        // Fetch first active product for pricing (or specific one if multi-product)
-        const product = await prisma.product.findFirst({
-            where: { active: true }
-        });
-
-        if (!product) {
-            return NextResponse.json({ success: false, error: 'No hay productos activos' }, { status: 400 });
-        }
-
         // 1. Create or Update Customer
-        // ... rest of the logic ...
+        // Upsert by phone (and email if provided)
         const customer = await prisma.customer.upsert({
             where: { phone: phone },
             update: {
@@ -73,7 +64,7 @@ export async function POST(req: Request) {
                 customerId: customer.id,
                 addressId: address.id,
                 siteId: siteId || 'zenpulse-chile',
-                packageContents: product.name,
+                packageContents: packageContents || 'ZenPulse Device',
                 packagePieces: parseInt(packagePieces) || 1,
                 paymentStatus: 'pending',
                 fulfillmentStatus: 'new',
@@ -85,13 +76,19 @@ export async function POST(req: Request) {
         const preference = new Preference(client);
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
+        // Fetch dynamic price
+        const priceSetting = await prisma.globalSetting.findUnique({
+            where: { key: "product_price" }
+        });
+        const unitPrice = priceSetting ? parseInt(priceSetting.value) : 19990;
+
         const preferenceResult = await preference.create({
             body: {
                 items: [
                     {
                         id: order.id,
-                        title: product.name,
-                        unit_price: product.price,
+                        title: order.packageContents,
+                        unit_price: unitPrice,
                         quantity: 1,
                         currency_id: 'CLP',
                     }
