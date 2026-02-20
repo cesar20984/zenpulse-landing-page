@@ -299,6 +299,30 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleRestore = async (ids: string[]) => {
+        if (ids.length === 0) return;
+
+        try {
+            const res = await fetch("/api/admin/orders/restore", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-admin-token": token
+                },
+                body: JSON.stringify({ ids })
+            });
+            if (res.ok) {
+                setOrders(orders.map(o => ids.includes(o.id) ? { ...o, isArchived: false } : o));
+                clearSelection();
+                alert(`${ids.length} órdenes restauradas con éxito`);
+            } else {
+                alert("Error al restaurar");
+            }
+        } catch (error) {
+            alert("Error de conexión");
+        }
+    };
+
     const handleUpdateStatus = async (id: string, newStatus: string) => {
         if (newStatus === 'new') {
             if (!confirm(`¿Estás seguro de que quieres desmarcar esta orden como enviada?`)) return;
@@ -504,13 +528,24 @@ export default function AdminDashboard() {
                                             Pagadas No Env.
                                         </button>
                                     ) : (
-                                        <button
-                                            onClick={handleEmptyArchive}
-                                            className="flex items-center gap-1.5 px-3 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-colors"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                            Vaciar Archivo
-                                        </button>
+                                        <div className="flex gap-2">
+                                            {selectedIds.size > 0 && (
+                                                <button
+                                                    onClick={() => handleRestore(Array.from(selectedIds))}
+                                                    className="flex items-center gap-1.5 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-bold hover:bg-emerald-100 transition-colors"
+                                                >
+                                                    <RefreshCw className="w-4 h-4" />
+                                                    Recuperar Seleccionadas
+                                                </button>
+                                            )}
+                                            <button
+                                                onClick={handleEmptyArchive}
+                                                className="flex items-center gap-1.5 px-3 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                Vaciar Archivo
+                                            </button>
+                                        </div>
                                     )}
                                     {selectedIds.size > 0 && (
                                         <>
@@ -581,7 +616,10 @@ export default function AdminDashboard() {
                                                     />
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <div className="font-bold text-sm">#{order.orderNumber || 'N/A'}</div>
+                                                    <div className="font-bold text-sm flex items-center gap-2">
+                                                        #{order.orderNumber || 'N/A'}
+                                                        {order.isArchived && <span className="text-[9px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">Archivado</span>}
+                                                    </div>
                                                     <div className="text-[10px] text-text/40 flex items-center gap-1 mt-1">
                                                         <Clock className="w-3 h-3" />
                                                         {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '---'}
@@ -658,7 +696,7 @@ export default function AdminDashboard() {
                                                             </button>
 
                                                             {activeMenuId === order.id && (
-                                                                <div className={`absolute right-0 w-56 bg-white rounded-2xl shadow-xl border border-primary/5 py-2 z-50 animate-in fade-in zoom-in duration-200 ${index > filteredOrders.length - 4 && filteredOrders.length > 5 ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'}`}>
+                                                                <div className={`absolute right-0 w-56 bg-white rounded-2xl shadow-2xl border border-primary/5 py-2 z-[100] animate-in fade-in zoom-in duration-200 ${index > filteredOrders.length - 4 && filteredOrders.length > 5 ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'}`}>
                                                                     <div className="px-4 py-2 text-[10px] font-bold text-text/30 uppercase tracking-widest border-b border-slate-50 mb-1">Enviar Correo</div>
 
                                                                     <button
