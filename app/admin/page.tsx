@@ -59,6 +59,9 @@ export default function AdminDashboard() {
 
     // Settings state
     const [price, setPrice] = useState("19990");
+    const [productName, setProductName] = useState("ZenPulse");
+    const [productDescription, setProductDescription] = useState("");
+    const [productCategoryId, setProductCategoryId] = useState("electronics");
     const [savingSettings, setSavingSettings] = useState(false);
 
     // Click away to close menu
@@ -97,31 +100,44 @@ export default function AdminDashboard() {
             if (data.success) {
                 const priceSetting = data.settings.find((s: any) => s.key === "product_price");
                 if (priceSetting) setPrice(priceSetting.value);
+
+                const nameSetting = data.settings.find((s: any) => s.key === "product_name");
+                if (nameSetting) setProductName(nameSetting.value);
+
+                const descSetting = data.settings.find((s: any) => s.key === "product_description");
+                if (descSetting) setProductDescription(descSetting.value);
+
+                const catSetting = data.settings.find((s: any) => s.key === "product_category_id");
+                if (catSetting) setProductCategoryId(catSetting.value);
             }
         } catch (error) {
             console.error("Error fetching settings:", error);
         }
     };
 
-    const handleUpdatePrice = async () => {
+    const handleUpdateSettings = async () => {
         setSavingSettings(true);
         try {
-            const res = await fetch("/api/admin/settings", {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-admin-token": token
-                },
-                body: JSON.stringify({ key: "product_price", value: price })
-            });
-            const data = await res.json();
-            if (data.success) {
-                alert("Precio actualizado con éxito");
-            } else {
-                alert("Error al actualizar precio");
+            const settingsToUpdate = [
+                { key: "product_price", value: price },
+                { key: "product_name", value: productName },
+                { key: "product_description", value: productDescription },
+                { key: "product_category_id", value: productCategoryId }
+            ];
+
+            for (const setting of settingsToUpdate) {
+                await fetch("/api/admin/settings", {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-admin-token": token
+                    },
+                    body: JSON.stringify(setting)
+                });
             }
+            alert("Configuración actualizada con éxito");
         } catch (error) {
-            alert("Error de conexión");
+            alert("Error al actualizar configuración");
         } finally {
             setSavingSettings(false);
         }
@@ -647,34 +663,65 @@ export default function AdminDashboard() {
                             </div>
 
                             <div className="p-8 space-y-8">
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <h3 className="font-bold text-text">Precio del Producto</h3>
-                                            <p className="text-xs text-text/40">Este precio se usará en la landing, checkout y Mercado Pago.</p>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-sm font-bold text-text/40">$</span>
+                                <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-text/60">Nombre del Producto</label>
                                             <input
-                                                type="number"
-                                                value={price}
-                                                onChange={(e) => setPrice(e.target.value)}
-                                                className="w-32 px-4 py-2 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold text-right"
+                                                type="text"
+                                                value={productName}
+                                                onChange={(e) => setProductName(e.target.value)}
+                                                placeholder="Ej: ZenPulse"
+                                                className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
                                             />
                                         </div>
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-text/60">Precio (CLP)</label>
+                                            <div className="relative">
+                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-text/40">$</span>
+                                                <input
+                                                    type="number"
+                                                    value={price}
+                                                    onChange={(e) => setPrice(e.target.value)}
+                                                    className="w-full pl-8 pr-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-text/60">Descripción del Producto (Mercado Pago)</label>
+                                        <textarea
+                                            value={productDescription}
+                                            onChange={(e) => setProductDescription(e.target.value)}
+                                            placeholder="Breve descripción para optimizar aprobación de pagos..."
+                                            className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium min-h-[100px]"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-text/60">ID de Categoría (Mercado Pago)</label>
+                                        <input
+                                            type="text"
+                                            value={productCategoryId}
+                                            onChange={(e) => setProductCategoryId(e.target.value)}
+                                            placeholder="Ej: electronics, health, instruments..."
+                                            className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
+                                        />
+                                        <p className="text-[10px] text-text/40 italic">Usa 'electronics' para tecnología o consulta la documentación de Mercado Pago.</p>
                                     </div>
 
                                     <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
                                         <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
                                         <p className="text-xs text-amber-800 leading-relaxed">
-                                            <strong>Atención:</strong> Cambiar el precio afectará inmediatamente a todos los nuevos procesos de checkout. Las órdenes ya creadas mantendrán el precio con el que fueron generadas.
+                                            <strong>Optimización MP:</strong> Completar el nombre, descripción y categoría ayuda a reducir el fraude y mejora la tasa de aprobación de pagos.
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="pt-4">
                                     <button
-                                        onClick={handleUpdatePrice}
+                                        onClick={handleUpdateSettings}
                                         disabled={savingSettings}
                                         className="w-full btn-primary py-4 flex items-center justify-center gap-2"
                                     >

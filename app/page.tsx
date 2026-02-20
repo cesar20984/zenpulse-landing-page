@@ -16,6 +16,7 @@ import ChatAssistant from "@/components/ChatAssistant";
 export default function Home() {
     const chatRef = useRef<{ open: () => void }>(null);
     const [price, setPrice] = useState("$19.990");
+    const [productName, setProductName] = useState("ZenPulse");
 
     useEffect(() => {
         fetch("/api/admin/settings")
@@ -27,9 +28,11 @@ export default function Home() {
                         const val = parseInt(priceSetting.value);
                         setPrice(`$${val.toLocaleString('es-CL').replace(/,/g, '.')}`);
                     }
+                    const nameSetting = data.settings.find((s: any) => s.key === "product_name");
+                    if (nameSetting) setProductName(nameSetting.value);
                 }
             })
-            .catch(err => console.error("Error fetching price:", err));
+            .catch(err => console.error("Error fetching settings:", err));
     }, []);
 
     const openChat = () => {
@@ -42,12 +45,12 @@ export default function Home() {
             <header className="py-6 border-b border-primary/10 bg-white/50 backdrop-blur-md z-50">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <Link href="/" className="text-2xl font-bold text-text">
-                        Zen<span className="text-primary italic">Pulse</span>
+                        {productName}
                     </Link>
                 </div>
             </header>
             {/* 1) Hero */}
-            <Hero price={price} />
+            <Hero price={price} productName={productName} />
             {/* 2) Problem identification */}
             <Problem />
             {/* 3) What is / What it feels like */}
@@ -68,7 +71,7 @@ export default function Home() {
             {/* Consult block — between FAQ and Footer */}
             <section className="bg-background py-12">
                 <div className="max-w-2xl mx-auto px-4 text-center">
-                    <p className="text-text/70 mb-4">¿Tienes dudas sobre ZenPulse?</p>
+                    <p className="text-text/70 mb-4">¿Tienes dudas sobre {productName}?</p>
                     <button
                         onClick={openChat}
                         className="px-8 py-3 border-2 border-primary/20 text-primary rounded-2xl font-bold hover:bg-primary/5 transition-colors"

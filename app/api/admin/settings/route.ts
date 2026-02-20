@@ -11,10 +11,34 @@ export async function GET() {
         const priceSetting = settings.find(s => s.key === "product_price");
         if (!priceSetting) {
             const newSetting = await prisma.globalSetting.create({
-                data: {
-                    key: "product_price",
-                    value: "19990"
-                }
+                data: { key: "product_price", value: "19990" }
+            });
+            settings.push(newSetting);
+        }
+
+        // Seed product name
+        const nameSetting = settings.find(s => s.key === "product_name");
+        if (!nameSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "product_name", value: "ZenPulse" }
+            });
+            settings.push(newSetting);
+        }
+
+        // Seed product description
+        const descSetting = settings.find(s => s.key === "product_description");
+        if (!descSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "product_description", value: "Dispositivo portátil de relajación con estimulación EMS suave para mejorar el descanso." }
+            });
+            settings.push(newSetting);
+        }
+
+        // Seed category ID
+        const catSetting = settings.find(s => s.key === "product_category_id");
+        if (!catSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "product_category_id", value: "electronics" }
             });
             settings.push(newSetting);
         }

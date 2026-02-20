@@ -76,18 +76,28 @@ export async function POST(req: Request) {
         const preference = new Preference(client);
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-        // Fetch dynamic price
-        const priceSetting = await prisma.globalSetting.findUnique({
-            where: { key: "product_price" }
+        // Fetch dynamic settings
+        const settings = await prisma.globalSetting.findMany({
+            where: {
+                key: {
+                    in: ["product_price", "product_name", "product_description", "product_category_id"]
+                }
+            }
         });
-        const unitPrice = priceSetting ? parseInt(priceSetting.value) : 19990;
+
+        const unitPrice = parseInt(settings.find(s => s.key === "product_price")?.value || "19990");
+        const productName = settings.find(s => s.key === "product_name")?.value || order.packageContents;
+        const productDescription = settings.find(s => s.key === "product_description")?.value || "";
+        const productCategoryId = settings.find(s => s.key === "product_category_id")?.value || "electronics";
 
         const preferenceResult = await preference.create({
             body: {
                 items: [
                     {
                         id: order.id,
-                        title: order.packageContents,
+                        title: productName,
+                        description: productDescription,
+                        category_id: productCategoryId,
                         unit_price: unitPrice,
                         quantity: 1,
                         currency_id: 'CLP',
