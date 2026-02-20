@@ -43,6 +43,7 @@ interface Order {
         comuna: string;
         instructions: string;
     };
+    isArchived: boolean;
 }
 
 export default function AdminDashboard() {
@@ -54,6 +55,7 @@ export default function AdminDashboard() {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [activeTab, setActiveTab] = useState<"orders" | "emails" | "settings">("orders");
+    const [showArchived, setShowArchived] = useState(false);
     const [showEmailModal, setShowEmailModal] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
@@ -207,9 +209,9 @@ export default function AdminDashboard() {
         });
     };
 
-    const selectAllNotShipped = () => {
-        const notShipped = filteredOrders.filter(o => o.fulfillmentStatus !== 'shipped').map(o => o.id);
-        setSelectedIds(new Set(notShipped));
+    const selectAllPaidAndNotShipped = () => {
+        const target = filteredOrders.filter(o => o.paymentStatus === 'paid' && o.fulfillmentStatus !== 'shipped').map(o => o.id);
+        setSelectedIds(new Set(target));
     };
 
     const clearSelection = () => setSelectedIds(new Set());
@@ -246,7 +248,14 @@ export default function AdminDashboard() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("¿Estás seguro de que quieres eliminar esta orden? Esta acción no se puede deshacer.")) return;
+        const order = orders.find(o => o.id === id);
+        const isAlreadyArchived = order?.isArchived;
+
+        const message = isAlreadyArchived
+            ? "¿Estás seguro de que quieres eliminar esta orden PERMANENTEMENTE? Esta acción no se puede deshacer."
+            : "¿Mover esta orden al archivo? Podrás recuperarla o borrarla definitivamente desde la pestaña de Archivados.";
+
+        if (!confirm(message)) return;
 
         try {
             const res = await fetch(`/api/admin/orders/delete?id=${id}`, {
@@ -254,15 +263,38 @@ export default function AdminDashboard() {
                 headers: { "x-admin-token": token },
             });
             if (res.ok) {
-                setOrders(orders.filter(o => o.id !== id));
-                if (selectedOrder?.id === id) {
-                    setSelectedOrder(null);
+                const data = await res.json();
+                if (isAlreadyArchived) {
+                    setOrders(orders.filter(o => o.id !== id));
+                    if (selectedOrder?.id === id) setSelectedOrder(null);
+                } else {
+                    setOrders(orders.map(o => o.id === id ? { ...o, isArchived: true } : o));
+                    if (selectedOrder?.id === id) setSelectedOrder({ ...selectedOrder, isArchived: true });
                 }
             } else {
-                alert("Error al eliminar la orden");
+                alert("Error al procesar la solicitud");
             }
         } catch (error) {
             console.error("Error deleting order:", error);
+            alert("Error de conexión");
+        }
+    };
+
+    const handleEmptyArchive = async () => {
+        if (!confirm("¿Estás seguro de que quieres vaciar TODO el archivo permanentemente? Esta acción NO se puede deshacer.")) return;
+
+        try {
+            const res = await fetch("/api/admin/orders/delete?bulk=archived", {
+                method: "DELETE",
+                headers: { "x-admin-token": token },
+            });
+            if (res.ok) {
+                setOrders(orders.filter(o => !o.isArchived));
+                alert("Archivo vaciado con éxito");
+            } else {
+                alert("Error al vaciar el archivo");
+            }
+        } catch (error) {
             alert("Error de conexión");
         }
     };
@@ -308,6 +340,10 @@ export default function AdminDashboard() {
     };
 
     const filteredOrders = orders.filter(o => {
+        // Base filter by archive status
+        if (showArchived && !o.isArchived) return false;
+        if (!showArchived && o.isArchived) return false;
+
         const searchLow = searchTerm.toLowerCase();
         return (
             (o.orderNumber?.toLowerCase() || "").includes(searchLow) ||
@@ -411,7 +447,7 @@ export default function AdminDashboard() {
                                     <ShoppingBag className="w-5 h-5" />
                                     <span className="text-sm font-medium">Total Órdenes</span>
                                 </div>
-                                <div className="text-3xl font-bold">{orders.length}</div>
+                                <div className="text-3xl font-bold">{orders.filter(o => !o.isArchived).length}</div>
                             </div>
                             <div className="bg-white p-6 rounded-2xl border border-primary/5 shadow-sm">
                                 <div className="flex items-center gap-4 text-text/60 mb-2">
@@ -419,7 +455,7 @@ export default function AdminDashboard() {
                                     <span className="text-sm font-medium">Pagadas</span>
                                 </div>
                                 <div className="text-3xl font-bold text-emerald-600">
-                                    {orders.filter(o => o.paymentStatus === 'paid').length}
+                                    {orders.filter(o => o.paymentStatus === 'paid' && !o.isArchived).length}
                                 </div>
                             </div>
                             <div className="bg-white p-6 rounded-2xl border border-primary/5 shadow-sm">
@@ -428,7 +464,7 @@ export default function AdminDashboard() {
                                     <span className="text-sm font-medium">Pendientes</span>
                                 </div>
                                 <div className="text-3xl font-bold text-amber-600">
-                                    {orders.filter(o => o.paymentStatus === 'pending').length}
+                                    {orders.filter(o => o.paymentStatus === 'pending' && !o.isArchived).length}
                                 </div>
                             </div>
                         </div>
@@ -437,7 +473,7 @@ export default function AdminDashboard() {
                         <div className="bg-white rounded-3xl border border-primary/5 shadow-sm overflow-hidden">
                             <div className="p-6 border-b border-primary/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <h2 className="text-lg font-bold">Últimos Pedidos</h2>
+                                    <h2 className="text-lg font-bold">{showArchived ? 'Pedidos Archivados' : 'Últimos Pedidos'}</h2>
                                     {selectedIds.size > 0 && (
                                         <span className="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-bold">
                                             {selectedIds.size} seleccionadas
@@ -445,13 +481,37 @@ export default function AdminDashboard() {
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <button
-                                        onClick={selectAllNotShipped}
-                                        className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold hover:bg-amber-100 transition-colors"
-                                    >
-                                        <CheckSquare className="w-4 h-4" />
-                                        No enviadas
-                                    </button>
+                                    <div className="flex bg-slate-100 p-1 rounded-xl mr-2">
+                                        <button
+                                            onClick={() => { setShowArchived(false); clearSelection(); }}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${!showArchived ? 'bg-white shadow-sm text-primary' : 'text-text/40'}`}
+                                        >
+                                            Activas
+                                        </button>
+                                        <button
+                                            onClick={() => { setShowArchived(true); clearSelection(); }}
+                                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${showArchived ? 'bg-white shadow-sm text-red-500' : 'text-text/40'}`}
+                                        >
+                                            Archivados
+                                        </button>
+                                    </div>
+                                    {!showArchived ? (
+                                        <button
+                                            onClick={selectAllPaidAndNotShipped}
+                                            className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold hover:bg-amber-100 transition-colors"
+                                        >
+                                            <CheckSquare className="w-4 h-4" />
+                                            Pagadas No Env.
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleEmptyArchive}
+                                            className="flex items-center gap-1.5 px-3 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 transition-colors"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            Vaciar Archivo
+                                        </button>
+                                    )}
                                     {selectedIds.size > 0 && (
                                         <>
                                             <button

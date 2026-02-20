@@ -41,6 +41,7 @@ model Order {
   packagePieces     Int               @default(1)
   paymentStatus     PaymentStatus     @default(pending)
   fulfillmentStatus FulfillmentStatus @default(new)
+  isArchived        Boolean           @default(false)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   address           Address           @relation(fields: [addressId], references: [id])
