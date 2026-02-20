@@ -71,9 +71,37 @@ export async function POST(req: Request) {
                             }
                         });
 
-                        // Send Notifications on Initial Approval
+                        // Send Notifications and Update Inventory on Initial Approval
                         if (isFirstApproval) {
-                            // 1. To Customer
+                            // 1. Update Inventory
+                            const stockSetting = await prisma.globalSetting.findUnique({
+                                where: { key: 'product_inventory' }
+                            });
+
+                            let currentStock = parseInt(stockSetting?.value || '0');
+                            if (currentStock > 0) {
+                                const newStock = currentStock - (order.packagePieces || 1);
+                                await prisma.globalSetting.update({
+                                    where: { key: 'product_inventory' },
+                                    data: { value: Math.max(0, newStock).toString() }
+                                });
+
+                                // 2. Notify Admin if Stock is Low (Exactly 1 remains)
+                                if (newStock === 1) {
+                                    const adminEmail = process.env.ADMIN_EMAIL || 'cesar@zenpulse.cl';
+                                    const productNameSetting = await prisma.globalSetting.findUnique({
+                                        where: { key: 'product_name' }
+                                    });
+                                    const productName = productNameSetting?.value || 'ZenPulse';
+
+                                    await sendEmail('admin-low-stock', adminEmail, {
+                                        product_name: productName,
+                                        admin_url: `${process.env.NEXT_PUBLIC_BASE_URL}/admin`
+                                    }).catch(err => console.error('Error sending low stock email:', err));
+                                }
+                            }
+
+                            // 3. To Customer
                             if (order.customer.email) {
                                 await sendEmail('purchase-confirmation', order.customer.email, {
                                     customer_name: order.customer.firstName,
@@ -84,8 +112,8 @@ export async function POST(req: Request) {
                                 });
                             }
 
-                            // 2. To Admin
-                            const adminEmail = process.env.ADMIN_EMAIL || 'cesar@zenpulse.cl'; // Fallback
+                            // 4. To Admin (New Order)
+                            const adminEmail = process.env.ADMIN_EMAIL || 'cesar@zenpulse.cl';
                             await sendEmail('admin-new-order', adminEmail, {
                                 customer_name: `${order.customer.firstName} ${order.customer.lastName}`,
                                 order_number: order.orderNumber || order.id.slice(0, 8),

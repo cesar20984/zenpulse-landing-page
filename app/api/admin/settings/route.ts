@@ -43,6 +43,15 @@ export async function GET() {
             settings.push(newSetting);
         }
 
+        // Seed inventory
+        const invSetting = settings.find(s => s.key === "product_inventory");
+        if (!invSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "product_inventory", value: "10" }
+            });
+            settings.push(newSetting);
+        }
+
         return NextResponse.json({ success: true, settings });
     } catch (error) {
         console.error("Error fetching settings:", error);

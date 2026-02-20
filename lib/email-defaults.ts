@@ -131,4 +131,17 @@ Saludos,
 El equipo de ZenPulse`,
         placeholders: ["customer_name", "order_number", "message"],
     },
+    {
+        slug: "admin-low-stock",
+        name: "Stock Crítico (Admin)",
+        subject: "⚠️ ¡ALERTA! Solo queda 1 unidad de {{product_name}}",
+        body: `¡Atención!
+
+El inventario de {{product_name}} ha llegado a solo 1 unidad. 
+
+Recomendación: Pausa la publicidad inmediatamente para evitar vender más unidades de las disponibles.
+
+Revisa el inventario aquí: {{admin_url}}`,
+        placeholders: ["product_name", "admin_url"],
+    },
 ];

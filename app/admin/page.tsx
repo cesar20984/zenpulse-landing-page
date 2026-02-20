@@ -62,6 +62,7 @@ export default function AdminDashboard() {
     const [productName, setProductName] = useState("ZenPulse");
     const [productDescription, setProductDescription] = useState("");
     const [productCategoryId, setProductCategoryId] = useState("electronics");
+    const [inventory, setInventory] = useState("10");
     const [savingSettings, setSavingSettings] = useState(false);
 
     // Click away to close menu
@@ -109,6 +110,9 @@ export default function AdminDashboard() {
 
                 const catSetting = data.settings.find((s: any) => s.key === "product_category_id");
                 if (catSetting) setProductCategoryId(catSetting.value);
+
+                const invSetting = data.settings.find((s: any) => s.key === "product_inventory");
+                if (invSetting) setInventory(invSetting.value);
             }
         } catch (error) {
             console.error("Error fetching settings:", error);
@@ -122,7 +126,8 @@ export default function AdminDashboard() {
                 { key: "product_price", value: price },
                 { key: "product_name", value: productName },
                 { key: "product_description", value: productDescription },
-                { key: "product_category_id", value: productCategoryId }
+                { key: "product_category_id", value: productCategoryId },
+                { key: "product_inventory", value: inventory }
             ];
 
             for (const setting of settingsToUpdate) {
@@ -699,16 +704,33 @@ export default function AdminDashboard() {
                                         />
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-text/60">ID de Categoría (Mercado Pago)</label>
-                                        <input
-                                            type="text"
-                                            value={productCategoryId}
-                                            onChange={(e) => setProductCategoryId(e.target.value)}
-                                            placeholder="Ej: electronics, health, instruments..."
-                                            className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
-                                        />
-                                        <p className="text-[10px] text-text/40 italic">Usa 'electronics' para tecnología o consulta la documentación de Mercado Pago.</p>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-text/60">ID de Categoría (Mercado Pago)</label>
+                                            <input
+                                                type="text"
+                                                value={productCategoryId}
+                                                onChange={(e) => setProductCategoryId(e.target.value)}
+                                                placeholder="Ej: electronics, health, instruments..."
+                                                className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
+                                            />
+                                            <p className="text-[10px] text-text/40 italic">Usa 'electronics' para tecnología o consulta la documentación de Mercado Pago.</p>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-text/60">Inventario (Stock)</label>
+                                            <div className="relative">
+                                                <input
+                                                    type="number"
+                                                    value={inventory}
+                                                    onChange={(e) => setInventory(e.target.value)}
+                                                    className={`w-full px-4 py-3 rounded-xl border outline-none font-bold ${parseInt(inventory) <= 3 ? 'border-red-200 bg-red-50 text-red-600 focus:ring-red-200' : 'border-primary/10 focus:ring-2 focus:ring-primary/20'}`}
+                                                />
+                                                {parseInt(inventory) <= 3 && (
+                                                    <AlertCircle className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" />
+                                                )}
+                                            </div>
+                                            <p className="text-[10px] text-text/40 italic">Se descontará automáticamente con cada pago aprobado.</p>
+                                        </div>
                                     </div>
 
                                     <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
