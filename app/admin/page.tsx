@@ -494,7 +494,7 @@ export default function AdminDashboard() {
                         </div>
 
                         {/* Table Header / Search */}
-                        <div className="bg-white rounded-3xl border border-primary/5 shadow-sm overflow-hidden">
+                        <div className="bg-white rounded-3xl border border-primary/5 shadow-sm">
                             <div className="p-6 border-b border-primary/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
                                     <h2 className="text-lg font-bold">{showArchived ? 'Pedidos Archivados' : 'Últimos Pedidos'}</h2>
@@ -696,7 +696,7 @@ export default function AdminDashboard() {
                                                             </button>
 
                                                             {activeMenuId === order.id && (
-                                                                <div className={`absolute right-0 w-56 bg-white rounded-2xl shadow-2xl border border-primary/5 py-2 z-[100] animate-in fade-in zoom-in duration-200 ${index > filteredOrders.length - 4 && filteredOrders.length > 5 ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'}`}>
+                                                                <div className={`absolute right-0 w-64 bg-white rounded-2xl shadow-2xl border border-primary/10 py-2 z-[100] animate-in fade-in zoom-in duration-200 ${index >= filteredOrders.length - 2 && filteredOrders.length > 1 ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'}`}>
                                                                     <div className="px-4 py-2 text-[10px] font-bold text-text/30 uppercase tracking-widest border-b border-slate-50 mb-1">Enviar Correo</div>
 
                                                                     <button
