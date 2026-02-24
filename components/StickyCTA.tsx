@@ -16,7 +16,7 @@ export default function StickyCTA({ price = "$19.990" }: { price?: string }) {
                         onClick={() => setIsGateOpen(true)}
                         className="w-full bg-cta text-white py-4 rounded-2xl font-bold text-center active:scale-95 transition-all shadow-lg shadow-cta/20 hover:shadow-cta/40 hover:-translate-y-0.5 text-lg"
                     >
-                        Comprar Ahora — {price}
+                        Comprar Ahora — {price} + Envío Gratis
                     </button>
                 </div>
             </div>

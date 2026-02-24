@@ -27,6 +27,10 @@ export default function Specs() {
                                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">✓</span>
                                 Manual de instrucciones
                             </li>
+                            <li className="flex items-center gap-3 font-bold text-emerald-600">
+                                <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">✓</span>
+                                Envío prioritario GRATIS
+                            </li>
                         </ul>
                     </div>
 

@@ -11,6 +11,10 @@ export default function Benefits() {
         {
             title: "Pausas durante el día",
             desc: "También puedes usarlo para una pausa corta cuando estás saturado.",
+        },
+        {
+            title: "Envío GRATIS",
+            desc: "Sin costos sorpresa. El envío a todo Santiago está incluido en el precio.",
         }
     ];
 

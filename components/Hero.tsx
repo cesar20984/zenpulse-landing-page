@@ -22,6 +22,9 @@ export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { 
 
             <div className="section-container relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest mb-6 animate-bounce">
+                        <span className="text-base">🚀</span> Envío GRATIS Incluido
+                    </div>
                     <h1 className="heading-1 mb-6 text-text">
                         Relájate antes de dormir con <span className="text-primary italic">pulsos suaves</span> en la palma
                     </h1>
@@ -29,9 +32,12 @@ export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { 
                         {productName} es un dispositivo portátil que entrega un estímulo rítmico suave en la mano. Te ayuda a bajar revoluciones y entrar en modo descanso.
                     </p>
 
-                    <div className="mb-6 text-center md:text-left">
+                    <div className="mb-6 text-center md:text-left flex items-baseline gap-3">
                         <span className="text-3xl font-bold text-text">{price}</span>
-                        <span className="text-sm text-text/60 ml-2">CLP</span>
+                        <div className="flex flex-col">
+                            <span className="text-xs font-bold text-emerald-500 uppercase">Envío Gratis</span>
+                            <span className="text-[10px] text-text/40 tracking-wider">CLP</span>
+                        </div>
                     </div>
 
                     {/* Trust Block */}
@@ -40,7 +46,7 @@ export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { 
                             <div className="flex items-center gap-2">
                                 <span className="text-emerald-500 text-base">🚚</span>
                                 <div>
-                                    <p className="text-text/90">Envío Lun–Vie</p>
+                                    <p className="text-text/90 font-bold text-emerald-600">Envío GRATIS</p>
                                     <button
                                         type="button"
                                         onClick={() => setShowComunas(!showComunas)}

@@ -24,7 +24,7 @@ export default function FAQ() {
         },
         {
             q: "¿Envían fuera de Santiago?",
-            a: "Por ahora, envíos solo en Santiago."
+            a: "Por ahora, realizamos envíos solo en Santiago, pero ¡el envío es GRATIS para todas las comunas con cobertura!"
         }
     ];
 

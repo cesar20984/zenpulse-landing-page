@@ -71,7 +71,9 @@ export default function Home() {
             {/* Consult block — between FAQ and Footer */}
             <section className="bg-background py-12">
                 <div className="max-w-2xl mx-auto px-4 text-center">
-                    <p className="text-text/70 mb-4">¿Tienes dudas sobre {productName}?</p>
+                    <p className="text-text/70 mb-4">
+                        ¿Tienes dudas sobre {productName}? Recuerda que el <strong>envío es GRATIS</strong> a todo Santiago.
+                    </p>
                     <button
                         onClick={openChat}
                         className="px-8 py-3 border-2 border-primary/20 text-primary rounded-2xl font-bold hover:bg-primary/5 transition-colors"

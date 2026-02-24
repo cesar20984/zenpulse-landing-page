@@ -26,9 +26,12 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                         </svg>
                     </div>
                     <h3 className="text-2xl font-bold text-text mb-2">Aviso Importante de Envío</h3>
-                    <p className="text-text/70">
+                    <p className="text-text/70 mb-2">
                         Actualmente realizamos envíos solo a comunas de Santiago, de <strong>lunes a viernes</strong>.
                     </p>
+                    <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full mb-2">
+                        ✅ ¡Envío GRATIS incluido!
+                    </div>
                     <button
                         type="button"
                         onClick={() => setShowComunas(!showComunas)}
