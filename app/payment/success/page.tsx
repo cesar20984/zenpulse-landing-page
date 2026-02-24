@@ -13,30 +13,47 @@ function SuccessContent() {
     const status = searchParams.get("status");
 
     useEffect(() => {
-        // Only track if status is approved/success
-        if (status === "approved" || !status) { // MP sometimes doesn't send status back in some flows but sends payment_id
+        // Only track if status is approved and we have a paymentId
+        if ((status === "approved" || (paymentId && !status)) && paymentId) {
+
+            // DEDUPLICATION: Check if this payment_id has already been tracked in this session
+            const trackedPayments = JSON.parse(sessionStorage.getItem("tracked_fb_purchases") || "[]");
+            if (trackedPayments.includes(paymentId)) {
+                console.log("Purchase already tracked for this payment_id, skipping.");
+                return;
+            }
+
             // Fetch current price to report to FB
             fetch("/api/admin/settings")
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         const priceSetting = data.settings.find((s: any) => s.key === "product_price");
-                        const price = priceSetting ? parseInt(priceSetting.value) : 19990;
+                        const price = priceSetting ? Number(priceSetting.value) : 19990;
 
+                        // Track event
                         trackFBEvent("Purchase", {
-                            value: price,
+                            value: price, // Explicit Number
                             currency: "CLP",
                             content_ids: ["zenpulse_device"],
-                            content_type: "product"
+                            content_type: "product",
+                            external_id: paymentId // Helps with data matching
                         });
+
+                        // Mark as tracked
+                        trackedPayments.push(paymentId);
+                        sessionStorage.setItem("tracked_fb_purchases", JSON.stringify(trackedPayments));
                     }
                 })
                 .catch(() => {
                     // Fallback track if settings fetch fails
                     trackFBEvent("Purchase", { value: 19990, currency: "CLP" });
+
+                    trackedPayments.push(paymentId);
+                    sessionStorage.setItem("tracked_fb_purchases", JSON.stringify(trackedPayments));
                 });
         }
-    }, [status]);
+    }, [status, paymentId]);
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
