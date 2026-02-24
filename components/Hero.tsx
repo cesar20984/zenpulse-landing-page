@@ -22,8 +22,9 @@ export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { 
 
             <div className="section-container relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 text-center md:text-left">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest mb-6 animate-bounce">
-                        <span className="text-base">🚀</span> Envío GRATIS Incluido
+                    <div className="inline-flex items-center gap-2 mb-8">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]"></span>
+                        <span className="text-emerald-700 text-[10px] font-bold uppercase tracking-[0.2em]">Envío GRATIS Incluido</span>
                     </div>
                     <h1 className="heading-1 mb-6 text-text">
                         Relájate antes de dormir con <span className="text-primary italic">pulsos suaves</span> en la palma
