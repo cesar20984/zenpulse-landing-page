@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import SantiagoGate from "./SantiagoGate";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
+import { trackFBEvent } from "./FacebookPixel";
 
 export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { price?: string, productName?: string }) {
     const [isGateOpen, setIsGateOpen] = useState(false);
@@ -13,6 +14,7 @@ export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { 
     };
 
     const handleConfirmSantiago = () => {
+        trackFBEvent("InitiateCheckout");
         window.location.href = "/checkout";
     };
 

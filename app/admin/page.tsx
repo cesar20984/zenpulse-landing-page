@@ -65,6 +65,7 @@ export default function AdminDashboard() {
     const [productDescription, setProductDescription] = useState("");
     const [productCategoryId, setProductCategoryId] = useState("electronics");
     const [inventory, setInventory] = useState("10");
+    const [facebookPixelId, setFacebookPixelId] = useState("2823997437931823");
     const [savingSettings, setSavingSettings] = useState(false);
 
     // Click away to close menu
@@ -115,6 +116,9 @@ export default function AdminDashboard() {
 
                 const invSetting = data.settings.find((s: any) => s.key === "product_inventory");
                 if (invSetting) setInventory(invSetting.value);
+
+                const pixelSetting = data.settings.find((s: any) => s.key === "facebook_pixel_id");
+                if (pixelSetting) setFacebookPixelId(pixelSetting.value);
             }
         } catch (error) {
             console.error("Error fetching settings:", error);
@@ -129,7 +133,8 @@ export default function AdminDashboard() {
                 { key: "product_name", value: productName },
                 { key: "product_description", value: productDescription },
                 { key: "product_category_id", value: productCategoryId },
-                { key: "product_inventory", value: inventory }
+                { key: "product_inventory", value: inventory },
+                { key: "facebook_pixel_id", value: facebookPixelId }
             ];
 
             for (const setting of settingsToUpdate) {
@@ -828,6 +833,20 @@ export default function AdminDashboard() {
                                                 )}
                                             </div>
                                             <p className="text-[10px] text-text/40 italic">Se descontará automáticamente con cada pago aprobado.</p>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-text/60">Facebook Pixel ID</label>
+                                            <div className="relative">
+                                                <input
+                                                    type="text"
+                                                    value={facebookPixelId}
+                                                    onChange={(e) => setFacebookPixelId(e.target.value)}
+                                                    placeholder="Ej: 2823997437931823"
+                                                    className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
+                                                />
+                                            </div>
+                                            <p className="text-[10px] text-text/40 italic">ID de tu Pixel de Facebook para seguimiento de conversiones.</p>
                                         </div>
                                     </div>
 

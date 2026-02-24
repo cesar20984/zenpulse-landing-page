@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Lora, Raleway } from "next/font/google";
 import "./globals.css";
+import { Suspense } from "react";
+import FacebookPixel from "@/components/FacebookPixel";
 
 const lora = Lora({
     subsets: ["latin"],
@@ -36,6 +38,9 @@ export default function RootLayout({
     return (
         <html lang="es" className="scroll-smooth">
             <body className={`${lora.variable} ${raleway.variable} font-body bg-background text-text antialiased`}>
+                <Suspense fallback={null}>
+                    <FacebookPixel />
+                </Suspense>
                 {children}
                 <script
                     type="application/ld+json"

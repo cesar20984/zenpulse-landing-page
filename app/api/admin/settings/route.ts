@@ -52,6 +52,15 @@ export async function GET() {
             settings.push(newSetting);
         }
 
+        // Seed Facebook Pixel ID
+        const pixelSetting = settings.find(s => s.key === "facebook_pixel_id");
+        if (!pixelSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "facebook_pixel_id", value: "2823997437931823" }
+            });
+            settings.push(newSetting);
+        }
+
         return NextResponse.json({ success: true, settings });
     } catch (error) {
         console.error("Error fetching settings:", error);

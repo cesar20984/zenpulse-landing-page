@@ -4,10 +4,39 @@ import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, ShoppingBag, ArrowRight } from "lucide-react";
 
+import { trackFBEvent } from "@/components/FacebookPixel";
+
 function SuccessContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const paymentId = searchParams.get("payment_id");
+    const status = searchParams.get("status");
+
+    useEffect(() => {
+        // Only track if status is approved/success
+        if (status === "approved" || !status) { // MP sometimes doesn't send status back in some flows but sends payment_id
+            // Fetch current price to report to FB
+            fetch("/api/admin/settings")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const priceSetting = data.settings.find((s: any) => s.key === "product_price");
+                        const price = priceSetting ? parseInt(priceSetting.value) : 19990;
+
+                        trackFBEvent("Purchase", {
+                            value: price,
+                            currency: "CLP",
+                            content_ids: ["zenpulse_device"],
+                            content_type: "product"
+                        });
+                    }
+                })
+                .catch(() => {
+                    // Fallback track if settings fetch fails
+                    trackFBEvent("Purchase", { value: 19990, currency: "CLP" });
+                });
+        }
+    }, [status]);
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
