@@ -219,7 +219,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
 
                                 <div className="flex gap-4">
                                     <div className="w-20 h-20 bg-secondary/10 rounded-2xl overflow-hidden shrink-0 relative">
-                                        <img src="/device.webp" alt="ZenPulse" className="w-full h-full object-cover" />
+                                        <img src="/images/product.webp" alt="ZenPulse" className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         <p className="font-bold text-text">ZenPulse Device</p>
