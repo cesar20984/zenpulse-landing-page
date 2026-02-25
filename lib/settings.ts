@@ -17,3 +17,28 @@ export async function getPrice() {
         };
     }
 }
+
+export async function getGlobalSettings() {
+    try {
+        const settings = await prisma.globalSetting.findMany({
+            where: {
+                key: { in: ["product_price", "product_name"] }
+            }
+        });
+
+        const priceSet = settings.find(s => s.key === "product_price");
+        const nameSet = settings.find(s => s.key === "product_name");
+
+        const priceVal = priceSet ? parseInt(priceSet.value) : 19990;
+
+        return {
+            price: `$${priceVal.toLocaleString('es-CL').replace(/,/g, '.')}`,
+            productName: nameSet?.value || "ZenPulse"
+        };
+    } catch (error) {
+        return {
+            price: "$19.990",
+            productName: "ZenPulse"
+        };
+    }
+}
