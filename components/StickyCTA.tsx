@@ -2,7 +2,7 @@ import { useState } from "react";
 import SantiagoGate from "./SantiagoGate";
 import { trackFBEvent } from "./FacebookPixel";
 
-export default function StickyCTA({ price = "$19.990" }: { price?: string }) {
+export default function StickyCTA({ price = "$22.990" }: { price?: string }) {
     const [isGateOpen, setIsGateOpen] = useState(false);
 
     const handleConfirmSantiago = () => {

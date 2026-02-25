@@ -60,7 +60,7 @@ export default function AdminDashboard() {
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
     // Settings state
-    const [price, setPrice] = useState("19990");
+    const [price, setPrice] = useState("22990");
     const [productName, setProductName] = useState("ZenPulse");
     const [productDescription, setProductDescription] = useState("");
     const [productCategoryId, setProductCategoryId] = useState("electronics");

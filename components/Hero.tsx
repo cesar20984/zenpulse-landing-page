@@ -4,7 +4,7 @@ import SantiagoGate from "./SantiagoGate";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 import { trackFBEvent } from "./FacebookPixel";
 
-export default function Hero({ price = "$19.990", productName = "ZenPulse" }: { price?: string, productName?: string }) {
+export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { price?: string, productName?: string }) {
     const [isGateOpen, setIsGateOpen] = useState(false);
     const [showComunas, setShowComunas] = useState(false);
 
