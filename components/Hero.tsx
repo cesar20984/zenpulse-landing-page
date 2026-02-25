@@ -19,7 +19,7 @@ export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { 
     };
 
     return (
-        <section className="relative overflow-hidden bg-background pt-20 pb-16 md:pt-32 md:pb-24">
+        <section className="relative overflow-hidden bg-background pt-8 pb-16 md:pt-12 md:pb-24">
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[600px] h-[600px] bg-secondary/20 rounded-full blur-3xl opacity-50" />
 
             <div className="section-container relative z-10">
