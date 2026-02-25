@@ -24,6 +24,16 @@ export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { 
 
             <div className="section-container relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 text-center md:text-left">
+                    <div className="mb-10 rounded-[2.5rem] overflow-hidden shadow-soft border border-primary/10 bg-white/50 p-2 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                        <Image
+                            src="/hero-product.webp"
+                            alt="ZenPulse - Tu compañero de descanso"
+                            width={800}
+                            height={350}
+                            className="w-full h-auto rounded-[2rem] object-cover"
+                            priority
+                        />
+                    </div>
                     <div className="inline-flex items-center gap-2 mb-8">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]"></span>
                         <span className="text-emerald-700 text-[10px] font-bold uppercase tracking-[0.2em]">Envío GRATIS Incluido</span>
