@@ -68,7 +68,7 @@ export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { 
                                             onClick={() => setShowComunas(!showComunas)}
                                             className="font-normal normal-case text-primary underline underline-offset-2 hover:text-primary/80 transition-colors cursor-pointer"
                                         >
-                                            Solo Santiago →
+                                            Solo Región Metropolitana →
                                         </button>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@ export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { 
                         {showComunas && (
                             <div className="mb-6 p-4 bg-white rounded-2xl border border-primary/10 shadow-sm max-w-md mx-auto md:mx-0 animate-in fade-in slide-in-from-top-2 duration-200">
                                 <div className="flex justify-between items-center mb-3">
-                                    <p className="text-sm font-bold text-text">Comunas con cobertura (Lun–Vie)</p>
+                                    <p className="text-sm font-bold text-text">Comunas con cobertura Región Metropolitana (Lun–Vie)</p>
                                     <button type="button" onClick={() => setShowComunas(false)} className="text-text/40 hover:text-text/60 text-lg">✕</button>
                                 </div>
                                 <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-text/60 max-h-40 overflow-y-auto">

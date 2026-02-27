@@ -23,8 +23,8 @@ export default function FAQ() {
             a: "USB-C (cable incluido). Limpieza con paño apenas húmedo o toallita con alcohol en la superficie metálica."
         },
         {
-            q: "¿Envían fuera de Santiago?",
-            a: "Por ahora, realizamos envíos solo en Santiago, pero ¡el envío es GRATIS para todas las comunas con cobertura!"
+            q: "¿Envían fuera de la Región Metropolitana?",
+            a: "Por ahora, realizamos envíos solo en la Región Metropolitana de Santiago, pero ¡el envío es GRATIS para todas las comunas con cobertura!"
         }
     ];
 

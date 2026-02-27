@@ -29,7 +29,7 @@ export async function POST(req: Request) {
                     - Promesa Principal: Mejorar tu rutina de sueño y relajación previa al descanso.
                     - Beneficios: Relajación antes de dormir, apoyo al descanso, foco y calma mental.
                     - Precio: ${currentPrice} CLP.
-                    - Envío: Solo Santiago de Chile. Entrega Hoy (si compras antes de las 12:00), Entrega Mañana (si compras después).
+                    - Envío: Solo Región Metropolitana de Santiago. Entrega Hoy (si compras antes de las 12:00), Entrega Mañana (si compras después).
                     - Garantía: 30 días de satisfacción total.
                     - Uso: Sostener en la PALMA de la mano con la correa. Recomendado 15 minutos diarios antes de dormir.
                     - IMPORTANTE: No es un dispositivo médico. Ayuda a relajarse, no es un tratamiento para enfermedades. No usar con marcapasos o embarazo.

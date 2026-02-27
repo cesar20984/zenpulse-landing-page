@@ -178,7 +178,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-text/60 ml-1">Comuna (Santiago)</label>
+                                    <label className="text-sm font-bold text-text/60 ml-1">Comuna (Región Metropolitana)</label>
                                     <select
                                         required
                                         name="comuna"

@@ -27,7 +27,7 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                     </div>
                     <h3 className="text-2xl font-bold text-text mb-2">Aviso Importante de Envío</h3>
                     <p className="text-text/70 mb-2">
-                        Actualmente realizamos envíos solo a comunas de Santiago, de <strong>lunes a viernes</strong>.
+                        Actualmente realizamos envíos solo a comunas de la Región Metropolitana, de <strong>lunes a viernes</strong>.
                     </p>
                     <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full mb-2">
                         ✅ ¡Envío GRATIS incluido!
@@ -72,7 +72,7 @@ export default function SantiagoGate({ isOpen, onClose, onConfirm }: SantiagoGat
                             onChange={(e) => setIsChecked(e.target.checked)}
                         />
                         <span className="text-sm text-text/80 select-none group-hover:text-text transition-colors">
-                            Confirmo que me encuentro en una comuna de Santiago con cobertura y acepto las condiciones de envío.
+                            Confirmo que me encuentro en una comuna de la Región Metropolitana con cobertura y acepto las condiciones de envío.
                         </span>
                     </label>
                 </div>

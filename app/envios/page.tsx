@@ -3,7 +3,7 @@ import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
 export const metadata = {
     title: "Políticas de Envío — ZenPulse",
-    description: "Información sobre cobertura, plazos de entrega y condiciones de envío de ZenPulse en Santiago de Chile.",
+    description: "Información sobre cobertura, plazos de entrega y condiciones de envío de ZenPulse en la Región Metropolitana de Santiago.",
 };
 
 export default function EnviosPage() {
@@ -24,7 +24,7 @@ export default function EnviosPage() {
                     <section>
                         <h2 className="text-xl font-bold text-text mb-3">Cobertura</h2>
                         <p>
-                            Realizamos envíos exclusivamente a las siguientes comunas de Santiago de Chile, <strong>de lunes a viernes</strong>:
+                            Realizamos envíos exclusivamente a las siguientes comunas de la Región Metropolitana de Santiago, <strong>de lunes a viernes</strong>:
                         </p>
                         <div className="mt-4 p-4 bg-white rounded-2xl border border-primary/5 shadow-sm">
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-sm">
