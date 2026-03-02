@@ -4,7 +4,7 @@ import SantiagoGate from "./SantiagoGate";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 import { trackFBEvent } from "./FacebookPixel";
 
-export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { price?: string, productName?: string }) {
+export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", productName = "ZenPulse" }: { price?: string, compareAtPrice?: string, productName?: string }) {
     const [isGateOpen, setIsGateOpen] = useState(false);
     const [showComunas, setShowComunas] = useState(false);
 
@@ -48,11 +48,19 @@ export default function Hero({ price = "$22.990", productName = "ZenPulse" }: { 
                             {productName} es un dispositivo portátil que entrega un estímulo rítmico suave en la mano. Te ayuda a bajar revoluciones y entrar en modo descanso.
                         </p>
 
-                        <div className="mb-6 text-center md:text-left flex items-baseline gap-3">
-                            <span className="text-3xl font-bold text-text">{price}</span>
+                        <div className="mb-6 text-center md:text-left flex items-center gap-4">
                             <div className="flex flex-col">
-                                <span className="text-xs font-bold text-emerald-500 uppercase">Envío Gratis</span>
-                                <span className="text-[10px] text-text/40 tracking-wider">CLP</span>
+                                <span className="text-secondary text-sm font-bold line-through opacity-50 decoration-secondary/50">{compareAtPrice}</span>
+                                <span className="text-4xl font-black text-text tracking-tight">{price}</span>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <div className="px-2 py-0.5 bg-cta/10 text-cta text-[10px] font-black rounded-lg uppercase tracking-wider animate-pulse">
+                                    Oferta
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <span className="text-xs font-bold text-emerald-500 uppercase">Envío Gratis</span>
+                                    <span className="text-[10px] text-text/30 tracking-wider">CLP</span>
+                                </div>
                             </div>
                         </div>
 

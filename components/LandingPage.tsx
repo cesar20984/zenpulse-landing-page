@@ -15,12 +15,14 @@ import ChatAssistant from "@/components/ChatAssistant";
 
 interface LandingPageProps {
     initialPrice: string;
+    initialCompareAtPrice: string;
     initialProductName: string;
 }
 
-export default function LandingPage({ initialPrice, initialProductName }: LandingPageProps) {
+export default function LandingPage({ initialPrice, initialCompareAtPrice, initialProductName }: LandingPageProps) {
     const chatRef = useRef<{ open: () => void }>(null);
     const [price, setPrice] = useState(initialPrice);
+    const [compareAtPrice, setCompareAtPrice] = useState(initialCompareAtPrice);
     const [productName, setProductName] = useState(initialProductName);
 
     useEffect(() => {
@@ -34,6 +36,11 @@ export default function LandingPage({ initialPrice, initialProductName }: Landin
                     if (priceSetting) {
                         const val = parseInt(priceSetting.value);
                         setPrice(`$${val.toLocaleString('es-CL').replace(/,/g, '.')}`);
+                    }
+                    const compareSetting = data.settings.find((s: any) => s.key === "compare_at_price");
+                    if (compareSetting) {
+                        const val = parseInt(compareSetting.value);
+                        setCompareAtPrice(`$${val.toLocaleString('es-CL').replace(/,/g, '.')}`);
                     }
                     const nameSetting = data.settings.find((s: any) => s.key === "product_name");
                     if (nameSetting) setProductName(nameSetting.value);
@@ -57,7 +64,7 @@ export default function LandingPage({ initialPrice, initialProductName }: Landin
                 </div>
             </header>
 
-            <Hero price={price} productName={productName} />
+            <Hero price={price} compareAtPrice={compareAtPrice} productName={productName} />
             <Problem />
             <ProductDetails />
             <HowToUse />

@@ -6,7 +6,7 @@ import { CheckCircle2, Truck, CreditCard, ShieldCheck, ArrowRight } from "lucide
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
 interface CheckoutContentProps {
-    initialPrice: { raw: number; formatted: string };
+    initialPrice: { raw: number; formatted: string; compareAtFormatted: string };
 }
 
 export default function CheckoutContent({ initialPrice }: CheckoutContentProps) {
@@ -32,11 +32,15 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
             .then(data => {
                 if (data.success) {
                     const priceSetting = data.settings.find((s: any) => s.key === "product_price");
+                    const compareSetting = data.settings.find((s: any) => s.key === "compare_at_price");
+
                     if (priceSetting) {
                         const val = parseInt(priceSetting.value);
+                        const compareVal = compareSetting ? parseInt(compareSetting.value) : 45990;
                         setPrice({
                             raw: val,
-                            formatted: `$${val.toLocaleString('es-CL').replace(/,/g, '.')}`
+                            formatted: `$${val.toLocaleString('es-CL').replace(/,/g, '.')}`,
+                            compareAtFormatted: `$${compareVal.toLocaleString('es-CL').replace(/,/g, '.')}`
                         });
                     }
                 }
@@ -224,7 +228,10 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                     <div className="flex flex-col justify-center">
                                         <p className="font-bold text-text">ZenPulse Device</p>
                                         <p className="text-sm text-text/40">Cantidad: 1</p>
-                                        <p className="text-sm font-bold text-primary">{price.formatted}</p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-text/30 line-through font-medium">{price.compareAtFormatted}</span>
+                                            <p className="text-sm font-bold text-primary">{price.formatted}</p>
+                                        </div>
                                     </div>
                                 </div>
 

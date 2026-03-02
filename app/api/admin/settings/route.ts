@@ -61,6 +61,15 @@ export async function GET() {
             settings.push(newSetting);
         }
 
+        // Seed compare at price (high price)
+        const compareAtSetting = settings.find(s => s.key === "compare_at_price");
+        if (!compareAtSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "compare_at_price", value: "45990" }
+            });
+            settings.push(newSetting);
+        }
+
         return NextResponse.json({ success: true, settings });
     } catch (error) {
         console.error("Error fetching settings:", error);

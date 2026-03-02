@@ -10,7 +10,8 @@ export default async function CheckoutPage() {
         <CheckoutContent
             initialPrice={{
                 raw: priceData.raw,
-                formatted: priceData.formatted
+                formatted: priceData.formatted,
+                compareAtFormatted: priceData.compareAtFormatted
             }}
         />
     );

@@ -61,6 +61,7 @@ export default function AdminDashboard() {
 
     // Settings state
     const [price, setPrice] = useState("22990");
+    const [compareAtPrice, setCompareAtPrice] = useState("45990");
     const [productName, setProductName] = useState("ZenPulse");
     const [productDescription, setProductDescription] = useState("");
     const [productCategoryId, setProductCategoryId] = useState("electronics");
@@ -105,6 +106,9 @@ export default function AdminDashboard() {
                 const priceSetting = data.settings.find((s: any) => s.key === "product_price");
                 if (priceSetting) setPrice(priceSetting.value);
 
+                const compareSetting = data.settings.find((s: any) => s.key === "compare_at_price");
+                if (compareSetting) setCompareAtPrice(compareSetting.value);
+
                 const nameSetting = data.settings.find((s: any) => s.key === "product_name");
                 if (nameSetting) setProductName(nameSetting.value);
 
@@ -130,6 +134,7 @@ export default function AdminDashboard() {
         try {
             const settingsToUpdate = [
                 { key: "product_price", value: price },
+                { key: "compare_at_price", value: compareAtPrice },
                 { key: "product_name", value: productName },
                 { key: "product_description", value: productDescription },
                 { key: "product_category_id", value: productCategoryId },
@@ -783,90 +788,103 @@ export default function AdminDashboard() {
                                                 className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
                                             />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-text/60">Precio (CLP)</label>
-                                            <div className="relative">
-                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-text/40">$</span>
-                                                <input
-                                                    type="number"
-                                                    value={price}
-                                                    onChange={(e) => setPrice(e.target.value)}
-                                                    className="w-full pl-8 pr-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
-                                                />
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-text/60">Precio Oferta (CLP)</label>
+                                                <div className="relative">
+                                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-text/40">$</span>
+                                                    <input
+                                                        type="number"
+                                                        value={price}
+                                                        onChange={(e) => setPrice(e.target.value)}
+                                                        className="w-full pl-8 pr-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-text/60 text-secondary">Precio Original (Tachado)</label>
+                                                <div className="relative">
+                                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-text/40 strike-through">$</span>
+                                                    <input
+                                                        type="number"
+                                                        value={compareAtPrice}
+                                                        onChange={(e) => setCompareAtPrice(e.target.value)}
+                                                        className="w-full pl-8 pr-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold text-text/40 line-through"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-text/60">Descripción del Producto (Mercado Pago)</label>
-                                        <textarea
-                                            value={productDescription}
-                                            onChange={(e) => setProductDescription(e.target.value)}
-                                            placeholder="Breve descripción para optimizar aprobación de pagos..."
-                                            className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium min-h-[100px]"
-                                        />
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-text/60">ID de Categoría (Mercado Pago)</label>
-                                            <input
-                                                type="text"
-                                                value={productCategoryId}
-                                                onChange={(e) => setProductCategoryId(e.target.value)}
-                                                placeholder="Ej: electronics, health, instruments..."
-                                                className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
+                                            <label className="text-sm font-bold text-text/60">Descripción del Producto (Mercado Pago)</label>
+                                            <textarea
+                                                value={productDescription}
+                                                onChange={(e) => setProductDescription(e.target.value)}
+                                                placeholder="Breve descripción para optimizar aprobación de pagos..."
+                                                className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium min-h-[100px]"
                                             />
-                                            <p className="text-[10px] text-text/40 italic">Usa 'electronics' para tecnología o consulta la documentación de Mercado Pago.</p>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-text/60">Inventario (Stock)</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="number"
-                                                    value={inventory}
-                                                    onChange={(e) => setInventory(e.target.value)}
-                                                    className={`w-full px-4 py-3 rounded-xl border outline-none font-bold ${parseInt(inventory) <= 3 ? 'border-red-200 bg-red-50 text-red-600 focus:ring-red-200' : 'border-primary/10 focus:ring-2 focus:ring-primary/20'}`}
-                                                />
-                                                {parseInt(inventory) <= 3 && (
-                                                    <AlertCircle className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" />
-                                                )}
-                                            </div>
-                                            <p className="text-[10px] text-text/40 italic">Se descontará automáticamente con cada pago aprobado.</p>
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-text/60">Facebook Pixel ID</label>
-                                            <div className="relative">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-text/60">ID de Categoría (Mercado Pago)</label>
                                                 <input
                                                     type="text"
-                                                    value={facebookPixelId}
-                                                    onChange={(e) => setFacebookPixelId(e.target.value)}
-                                                    placeholder="Ej: 2823997437931823"
+                                                    value={productCategoryId}
+                                                    onChange={(e) => setProductCategoryId(e.target.value)}
+                                                    placeholder="Ej: electronics, health, instruments..."
                                                     className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
                                                 />
+                                                <p className="text-[10px] text-text/40 italic">Usa 'electronics' para tecnología o consulta la documentación de Mercado Pago.</p>
                                             </div>
-                                            <p className="text-[10px] text-text/40 italic">ID de tu Pixel de Facebook para seguimiento de conversiones.</p>
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-text/60">Inventario (Stock)</label>
+                                                <div className="relative">
+                                                    <input
+                                                        type="number"
+                                                        value={inventory}
+                                                        onChange={(e) => setInventory(e.target.value)}
+                                                        className={`w-full px-4 py-3 rounded-xl border outline-none font-bold ${parseInt(inventory) <= 3 ? 'border-red-200 bg-red-50 text-red-600 focus:ring-red-200' : 'border-primary/10 focus:ring-2 focus:ring-primary/20'}`}
+                                                    />
+                                                    {parseInt(inventory) <= 3 && (
+                                                        <AlertCircle className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" />
+                                                    )}
+                                                </div>
+                                                <p className="text-[10px] text-text/40 italic">Se descontará automáticamente con cada pago aprobado.</p>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-text/60">Facebook Pixel ID</label>
+                                                <div className="relative">
+                                                    <input
+                                                        type="text"
+                                                        value={facebookPixelId}
+                                                        onChange={(e) => setFacebookPixelId(e.target.value)}
+                                                        placeholder="Ej: 2823997437931823"
+                                                        className="w-full px-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-medium"
+                                                    />
+                                                </div>
+                                                <p className="text-[10px] text-text/40 italic">ID de tu Pixel de Facebook para seguimiento de conversiones.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
+                                            <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+                                            <p className="text-xs text-amber-800 leading-relaxed">
+                                                <strong>Optimización MP:</strong> Completar el nombre, descripción y categoría ayuda a reducir el fraude y mejora la tasa de aprobación de pagos.
+                                            </p>
                                         </div>
                                     </div>
-
-                                    <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
-                                        <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
-                                        <p className="text-xs text-amber-800 leading-relaxed">
-                                            <strong>Optimización MP:</strong> Completar el nombre, descripción y categoría ayuda a reducir el fraude y mejora la tasa de aprobación de pagos.
-                                        </p>
+                                    <div className="pt-4">
+                                        <button
+                                            onClick={handleUpdateSettings}
+                                            disabled={savingSettings}
+                                            className="w-full btn-primary py-4 flex items-center justify-center gap-2"
+                                        >
+                                            {savingSettings ? <RefreshCw className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
+                                            Guardar Configuración
+                                        </button>
                                     </div>
-                                </div>
-
-                                <div className="pt-4">
-                                    <button
-                                        onClick={handleUpdateSettings}
-                                        disabled={savingSettings}
-                                        className="w-full btn-primary py-4 flex items-center justify-center gap-2"
-                                    >
-                                        {savingSettings ? <RefreshCw className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-                                        Guardar Configuración
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -882,7 +900,7 @@ export default function AdminDashboard() {
                             <div className="flex justify-between items-start mb-8">
                                 <div className="flex items-center gap-4">
                                     <div>
-                                        <h3 className="text-2xl font-bold">Detalles de Orden</h3>
+                                        <h3 className="text-2xl font-bold text-text">Detalles de Orden</h3>
                                         <p className="text-primary font-medium">#{selectedOrder.orderNumber}</p>
                                     </div>
                                     <button
@@ -907,7 +925,7 @@ export default function AdminDashboard() {
                                         <User className="w-4 h-4" /> Cliente
                                     </h4>
                                     <div className="space-y-1">
-                                        <p className="font-bold text-lg">{selectedOrder.customer.firstName} {selectedOrder.customer.lastName}</p>
+                                        <p className="font-bold text-lg text-text">{selectedOrder.customer.firstName} {selectedOrder.customer.lastName}</p>
                                         <p className="text-text/70">{selectedOrder.customer.phone}</p>
                                         <p className="text-text/70">{selectedOrder.customer.email || 'Sin email'}</p>
                                     </div>
@@ -918,7 +936,7 @@ export default function AdminDashboard() {
                                         <MapPin className="w-4 h-4" /> Entrega
                                     </h4>
                                     <div className="space-y-1">
-                                        <p className="font-bold">{selectedOrder.address.comuna}</p>
+                                        <p className="font-bold text-text">{selectedOrder.address.comuna}</p>
                                         <p className="text-text/70">{selectedOrder.address.streetAddress}</p>
                                         {selectedOrder.address.instructions && (
                                             <div className="mt-3 p-3 bg-slate-50 rounded-xl text-sm italic text-text/60 border-l-2 border-primary/20">
@@ -932,7 +950,7 @@ export default function AdminDashboard() {
                             <div className="mt-10 p-6 bg-slate-50 rounded-2xl">
                                 <h4 className="text-xs font-bold uppercase tracking-widest text-text/40 mb-4">Contenido del Paquete</h4>
                                 <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-primary/5">
-                                    <span className="font-medium">{selectedOrder.packageContents}</span>
+                                    <span className="font-medium text-text">{selectedOrder.packageContents}</span>
                                     <span className="font-bold text-primary">$19.990</span>
                                 </div>
                             </div>
@@ -969,6 +987,7 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             )}
+
             {showEmailModal && selectedOrder && (
                 <ManualEmailModal
                     order={selectedOrder}
