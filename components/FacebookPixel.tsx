@@ -75,7 +75,22 @@ export default function FacebookPixel() {
 
 // Helper to track custom events from any component
 export const trackFBEvent = (event: string, data?: any) => {
-    if (typeof window !== "undefined" && typeof window.fbq === "function") {
-        window.fbq("track", event, data);
+    if (typeof window !== "undefined") {
+        if (typeof window.fbq === "function") {
+            window.fbq("track", event, data);
+        } else {
+            // Si el Pixel ID aún se está cargando (asíncrono), lo reintentamos
+            let attempts = 0;
+            const interval = setInterval(() => {
+                if (typeof window.fbq === "function") {
+                    window.fbq("track", event, data);
+                    clearInterval(interval);
+                } else if (attempts >= 50) {
+                    // Si después de 5 segundos no cargó, nos rendimos (timeout)
+                    clearInterval(interval);
+                }
+                attempts++;
+            }, 100); // Revisar cada 100ms
+        }
     }
 };
