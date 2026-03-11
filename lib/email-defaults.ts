@@ -114,7 +114,9 @@ Puedes terminar tu compra aquí: {{checkout_url}}
 ¡Te deseamos un buen descanso!
 
 Saludos,
-El equipo de ZenPulse`,
+El equipo de ZenPulse
+
+PD: Entendemos lo molesto que puede ser el spam. Te prometemos que este será el único recordatorio que te enviaremos sobre este pedido.`,
         placeholders: ["customer_name", "checkout_url"],
     },
     {
@@ -150,7 +152,7 @@ Revisa el inventario aquí: {{admin_url}}`,
         subject: "🎁 Un descuento especial para tu descanso",
         body: `Hola {{customer_name}},
 
-Vimos tu interés en ZenPulse. Queremos ayudarte a mejorar tu descanso, así que te hemos activado un descuento especial y exclusivo.
+Vimos tu interés en ZenPulse. Queremos ayudarte a mejorar tu descanso, así que te hemos activado un descuento especial y exclusivo de {{discount_amount}}.
 
 Tu descuento ya está aplicado en el siguiente enlace:
 {{checkout_url_discount}}
@@ -159,7 +161,9 @@ Recuerda que con esto sigues obteniendo Envío Gratis y entrega rápida.
 ¡No dejes pasar esta oportunidad de regalarte bienestar!
 
 Saludos,
-El equipo de ZenPulse`,
-        placeholders: ["customer_name", "checkout_url_discount"],
+El equipo de ZenPulse
+
+PD: Entendemos lo molesto que puede ser el spam. Es por eso que te prometemos que este será el único recordatorio que te enviaremos sobre este pedido.`,
+        placeholders: ["customer_name", "checkout_url_discount", "discount_amount"],
     },
 ];

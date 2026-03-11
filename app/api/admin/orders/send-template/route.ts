@@ -28,7 +28,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Order or customer email not found' }, { status: 404 });
         }
 
-        const { formatted: priceStr } = await getPrice();
+        const { formatted: priceStr, discountAmountRaw } = await getPrice();
+        const formattedDiscount = discountAmountRaw ? `$${discountAmountRaw.toLocaleString('es-CL').replace(/,/g, '.')}` : '$5.000';
 
         // Prepare variables based on template needs
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://zenpulse.cl";
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
             admin_url: `${baseUrl}/admin`,
             checkout_url: `${baseUrl}/checkout`,
             checkout_url_discount: `${baseUrl}/checkout?discount=true`,
+            discount_amount: formattedDiscount,
             message: "", // Empty for template trigger
         };
 
