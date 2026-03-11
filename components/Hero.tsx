@@ -1,22 +1,17 @@
 import Image from "next/image";
 import { useState } from "react";
-import SantiagoGate from "./SantiagoGate";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 import { trackFBEvent } from "./FacebookPixel";
 
 export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", productName = "ZenPulse" }: { price?: string, compareAtPrice?: string, productName?: string }) {
-    const [isGateOpen, setIsGateOpen] = useState(false);
     const [showComunas, setShowComunas] = useState(false);
 
     const handlePurchaseClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        setIsGateOpen(true);
-    };
-
-    const handleConfirmSantiago = () => {
         trackFBEvent("InitiateCheckout");
         window.location.href = "/checkout";
     };
+
 
     return (
         <section className="relative overflow-hidden bg-background pt-8 pb-16 md:pt-12 md:pb-24">
@@ -134,11 +129,7 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                             Se usa en la palma con correa (no en la muñeca). Uso recomendado: 15 min.
                         </p>
 
-                        <SantiagoGate
-                            isOpen={isGateOpen}
-                            onClose={() => setIsGateOpen(false)}
-                            onConfirm={handleConfirmSantiago}
-                        />
+
                     </div>
 
                     <div className="flex-1 relative">

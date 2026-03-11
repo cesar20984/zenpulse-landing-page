@@ -25,7 +25,42 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
         packagePieces: "1",
     });
 
+    const [deliveryText, setDeliveryText] = useState("Procesando envío rápido...");
+
     useEffect(() => {
+        const updateDeliveryText = () => {
+            const now = new Date();
+            const day = now.getDay();
+            const hour = now.getHours();
+            const minutes = now.getMinutes();
+
+            if (day === 6 || day === 0 || (day === 5 && hour >= 12)) {
+                setDeliveryText("Recibe el lunes");
+                return;
+            }
+
+            if (day >= 1 && day <= 4 && hour >= 12) {
+                setDeliveryText("Recibe mañana");
+                return;
+            }
+
+            if (day >= 1 && day <= 5 && hour < 12) {
+                const remainingHours = 11 - hour;
+                const remainingMinutes = 59 - minutes;
+                
+                let timeStr = "";
+                if (remainingHours > 0) {
+                    timeStr += `${remainingHours} hrs y `;
+                }
+                timeStr += `${remainingMinutes} mins`;
+                
+                setDeliveryText(`Recibes hoy si compras en los próximos ${timeStr}`);
+            }
+        };
+
+        updateDeliveryText();
+        const interval = setInterval(updateDeliveryText, 60000);
+        
         // Refresh price on mount to be safe, but now start with correct one
         fetch("/api/admin/settings")
             .then(res => res.json())
@@ -46,6 +81,8 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                 }
             })
             .catch(err => console.error("Error refreshing price:", err));
+
+        return () => clearInterval(interval);
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -280,7 +317,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                 <div className="space-y-3 pt-4">
                                     <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest">
                                         <Truck className="w-3 h-3" />
-                                        Recibe en 1-3 días hábiles
+                                        {deliveryText}
                                     </div>
                                     <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest">
                                         <CheckCircle2 className="w-3 h-3" />
