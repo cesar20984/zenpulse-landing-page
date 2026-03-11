@@ -15,9 +15,11 @@ export async function GET(req: Request) {
             orderBy: { name: "asc" }
         });
 
-        // Seed if empty
-        if (templates.length === 0) {
-            for (const t of DEFAULT_TEMPLATES) {
+        const templateSlugs = new Set(templates.map(t => t.slug));
+        let addedNew = false;
+        
+        for (const t of DEFAULT_TEMPLATES) {
+            if (!templateSlugs.has(t.slug)) {
                 await prisma.emailTemplate.create({
                     data: {
                         slug: t.slug,
@@ -29,7 +31,11 @@ export async function GET(req: Request) {
                         placeholders: t.placeholders
                     }
                 });
+                addedNew = true;
             }
+        }
+
+        if (addedNew) {
             templates = await prisma.emailTemplate.findMany({
                 orderBy: { name: "asc" }
             });
