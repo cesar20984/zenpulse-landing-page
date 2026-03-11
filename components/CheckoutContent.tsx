@@ -319,8 +319,8 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                         <Truck className="w-3.5 h-3.5" />
                                         {deliveryText}
                                     </div>
-                                    <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest">
-                                        <CheckCircle2 className="w-3 h-3" />
+                                    <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest px-3">
+                                        <CheckCircle2 className="w-3.5 h-3.5" />
                                         Garantía de Satisfacción
                                     </div>
                                 </div>
