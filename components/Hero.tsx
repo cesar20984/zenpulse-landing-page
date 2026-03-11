@@ -1,10 +1,41 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 import { trackFBEvent } from "./FacebookPixel";
+import { Truck } from "lucide-react";
 
 export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", productName = "ZenPulse" }: { price?: string, compareAtPrice?: string, productName?: string }) {
     const [showComunas, setShowComunas] = useState(false);
+    const [deliveryText, setDeliveryText] = useState<string | null>(null);
+
+    useEffect(() => {
+        const updateDeliveryText = () => {
+            const now = new Date();
+            const day = now.getDay();
+            const hour = now.getHours();
+            const minutes = now.getMinutes();
+
+            // Only show if Monday(1) to Friday(5) AND before 12:00
+            if (day >= 1 && day <= 5 && hour < 12) {
+                const remainingHours = 11 - hour;
+                const remainingMinutes = 59 - minutes;
+                
+                let timeStr = "";
+                if (remainingHours > 0) {
+                    timeStr += `${remainingHours} hrs y `;
+                }
+                timeStr += `${remainingMinutes} mins`;
+                
+                setDeliveryText(`Recibes hoy si compras en los próximos ${timeStr}`);
+            } else {
+                setDeliveryText(null); // Hide message entirely outside these windows
+            }
+        };
+
+        updateDeliveryText();
+        const interval = setInterval(updateDeliveryText, 60000);
+        return () => clearInterval(interval);
+    }, []);
 
     const handlePurchaseClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -58,6 +89,15 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                                 </div>
                             </div>
                         </div>
+
+                        {deliveryText && (
+                            <div className="mb-6 flex items-center justify-center md:justify-start">
+                                <div className="flex items-center gap-2 text-xs md:text-sm text-emerald-700 font-bold bg-emerald-50 w-fit px-4 py-2 rounded-xl border border-emerald-200 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
+                                    <Truck className="w-5 h-5 text-emerald-500" />
+                                    <span>{deliveryText}</span>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Trust Block */}
                         <div className="bg-white/50 backdrop-blur-sm border border-primary/5 rounded-2xl p-4 mb-8 text-left max-w-md mx-auto md:mx-0 shadow-sm">
