@@ -34,12 +34,12 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
             const hour = now.getHours();
             const minutes = now.getMinutes();
 
-            if (day === 6 || day === 0 || (day === 5 && hour >= 12)) {
+            if (day === 6 || (day === 5 && hour >= 12)) {
                 setDeliveryText("Recibe el lunes");
                 return;
             }
 
-            if (day >= 1 && day <= 4 && hour >= 12) {
+            if ((day >= 1 && day <= 4 && hour >= 12) || day === 0) {
                 setDeliveryText("Recibe mañana");
                 return;
             }
