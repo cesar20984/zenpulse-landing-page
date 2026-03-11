@@ -43,6 +43,8 @@ model Order {
   paymentStatus     PaymentStatus     @default(pending)
   fulfillmentStatus FulfillmentStatus @default(new)
   isArchived        Boolean           @default(false)
+  abandonedCartSent Boolean           @default(false)
+  discountSent      Boolean           @default(false)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   address           Address           @relation(fields: [addressId], references: [id])

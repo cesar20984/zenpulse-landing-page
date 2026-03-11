@@ -46,6 +46,8 @@ interface Order {
     };
     isArchived: boolean;
     soldPrice?: number;
+    abandonedCartSent?: boolean;
+    discountSent?: boolean;
 }
 
 export default function AdminDashboard() {
@@ -641,6 +643,18 @@ export default function AdminDashboard() {
                                                         <Clock className="w-3 h-3" />
                                                         {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '---'}
                                                     </div>
+                                                    <div className="flex gap-1 mt-1.5">
+                                                        {order.abandonedCartSent && (
+                                                            <span title="Email Carrito Abandonado Enviado" className="flex items-center justify-center w-4 h-4 rounded-full bg-amber-100 text-amber-600">
+                                                                <ShoppingBag className="w-2.5 h-2.5" />
+                                                            </span>
+                                                        )}
+                                                        {order.discountSent && (
+                                                            <span title="Email Descuento Enviado" className="flex items-center justify-center w-4 h-4 rounded-full bg-emerald-100 text-emerald-600">
+                                                                <TrendingDown className="w-2.5 h-2.5" />
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="font-medium text-sm">{order.customer?.firstName || 'Sin'} {order.customer?.lastName || 'Nombre'}</div>
@@ -747,15 +761,17 @@ export default function AdminDashboard() {
 
                                                                     <button
                                                                         onClick={() => handleSendTemplate(order.id, 'abandoned-cart')}
-                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-2"
+                                                                        className={`w-full text-left px-4 py-2 text-xs font-medium transition-colors flex items-center gap-2 ${order.abandonedCartSent ? 'text-amber-700/50 bg-amber-50/50' : 'text-amber-600 hover:bg-amber-50 hover:text-amber-700'}`}
                                                                     >
-                                                                        <ShoppingBag className="w-3.5 h-3.5" /> Carrito Abandonado
+                                                                        {order.abandonedCartSent ? <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+                                                                        {order.abandonedCartSent ? 'Re-enviar Carrito' : 'Carrito Abandonado'}
                                                                     </button>
                                                                     <button
                                                                         onClick={() => handleSendTemplate(order.id, 'send-discount')}
-                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center gap-2"
+                                                                        className={`w-full text-left px-4 py-2 text-xs font-medium transition-colors flex items-center gap-2 ${order.discountSent ? 'text-emerald-700/50 bg-emerald-50/50' : 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700'}`}
                                                                     >
-                                                                        <TrendingDown className="w-3.5 h-3.5" /> Enviar Descuento
+                                                                        {order.discountSent ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                                                                        {order.discountSent ? 'Re-enviar Descuento' : 'Enviar Descuento'}
                                                                     </button>
 
                                                                     <div className="h-px bg-slate-50 my-1"></div>

@@ -50,6 +50,20 @@ export async function POST(req: Request) {
 
         const success = await sendEmail(templateSlug, order.customer.email, variables);
 
+        if (success) {
+            if (templateSlug === 'abandoned-cart') {
+                await prisma.order.update({
+                    where: { id: orderId },
+                    data: { abandonedCartSent: true }
+                });
+            } else if (templateSlug === 'send-discount') {
+                await prisma.order.update({
+                    where: { id: orderId },
+                    data: { discountSent: true }
+                });
+            }
+        }
+
         return NextResponse.json({ success });
     } catch (error: any) {
         console.error('Send Template Error:', error);
