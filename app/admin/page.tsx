@@ -19,7 +19,8 @@ import {
     Mail,
     Settings,
     MoreVertical,
-    Truck
+    Truck,
+    TrendingDown
 } from "lucide-react";
 import * as XLSX from 'xlsx';
 import EmailManager from "@/components/admin/EmailManager";
@@ -44,6 +45,7 @@ interface Order {
         instructions: string;
     };
     isArchived: boolean;
+    soldPrice?: number;
 }
 
 export default function AdminDashboard() {
@@ -62,6 +64,7 @@ export default function AdminDashboard() {
     // Settings state
     const [price, setPrice] = useState("22990");
     const [compareAtPrice, setCompareAtPrice] = useState("45990");
+    const [discountAmount, setDiscountAmount] = useState("5000");
     const [productName, setProductName] = useState("ZenPulse");
     const [productDescription, setProductDescription] = useState("");
     const [productCategoryId, setProductCategoryId] = useState("electronics");
@@ -109,6 +112,9 @@ export default function AdminDashboard() {
                 const compareSetting = data.settings.find((s: any) => s.key === "compare_at_price");
                 if (compareSetting) setCompareAtPrice(compareSetting.value);
 
+                const discountSetting = data.settings.find((s: any) => s.key === "discount_amount");
+                if (discountSetting) setDiscountAmount(discountSetting.value);
+
                 const nameSetting = data.settings.find((s: any) => s.key === "product_name");
                 if (nameSetting) setProductName(nameSetting.value);
 
@@ -135,6 +141,7 @@ export default function AdminDashboard() {
             const settingsToUpdate = [
                 { key: "product_price", value: price },
                 { key: "compare_at_price", value: compareAtPrice },
+                { key: "discount_amount", value: discountAmount },
                 { key: "product_name", value: productName },
                 { key: "product_description", value: productDescription },
                 { key: "product_category_id", value: productCategoryId },
@@ -640,7 +647,8 @@ export default function AdminDashboard() {
                                                     <div className="text-xs text-text/40">{order.customer?.phone || 'Sin fono'}</div>
                                                 </td>
                                                 <td className="px-6 py-4 text-sm">
-                                                    {order.packageContents || '---'}
+                                                    <div className="font-bold text-text/90">${order.soldPrice?.toLocaleString('es-CL') || '19.990'}</div>
+                                                    <div className="text-xs text-text/50 mt-0.5">{order.packageContents || '---'}</div>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="text-sm">{order.address?.comuna || '---'}</div>
@@ -735,6 +743,22 @@ export default function AdminDashboard() {
                                                                     </button>
 
                                                                     <div className="h-px bg-slate-50 my-1"></div>
+                                                                    <div className="px-4 py-2 text-[10px] font-bold text-text/30 uppercase tracking-widest border-b border-slate-50 mb-1">Recuperación & Ofertas</div>
+
+                                                                    <button
+                                                                        onClick={() => handleSendTemplate(order.id, 'abandoned-cart')}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <ShoppingBag className="w-3.5 h-3.5" /> Carrito Abandonado
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleSendTemplate(order.id, 'send-discount')}
+                                                                        className="w-full text-left px-4 py-2 text-xs font-medium text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center gap-2"
+                                                                    >
+                                                                        <TrendingDown className="w-3.5 h-3.5" /> Enviar Descuento
+                                                                    </button>
+
+                                                                    <div className="h-px bg-slate-50 my-1"></div>
 
                                                                     <button
                                                                         onClick={() => {
@@ -812,6 +836,19 @@ export default function AdminDashboard() {
                                                         className="w-full pl-8 pr-4 py-3 rounded-xl border border-primary/10 focus:ring-2 focus:ring-primary/20 outline-none font-bold text-text/40 line-through"
                                                     />
                                                 </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-emerald-600">Descuento Especial (Email)</label>
+                                                <div className="relative">
+                                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-emerald-500">$</span>
+                                                    <input
+                                                        type="number"
+                                                        value={discountAmount}
+                                                        onChange={(e) => setDiscountAmount(e.target.value)}
+                                                        className="w-full pl-8 pr-4 py-3 rounded-xl border border-emerald-200 focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-emerald-700 bg-emerald-50"
+                                                    />
+                                                </div>
+                                                <p className="text-[10px] text-text/40">Este monto se resta del Precio Oferta si el cliente viene con ?discount=true</p>
                                             </div>
                                         </div>
 

@@ -31,6 +31,8 @@ export async function POST(req: Request) {
         const { formatted: priceStr } = await getPrice();
 
         // Prepare variables based on template needs
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://zenpulse.cl";
+        
         const variables: Record<string, string> = {
             customer_name: order.customer.firstName,
             order_number: order.orderNumber || order.id.slice(0, 8),
@@ -38,7 +40,9 @@ export async function POST(req: Request) {
             shipping_address: order.address.streetAddress,
             comuna: order.address.comuna,
             amount: priceStr,
-            admin_url: `${process.env.NEXT_PUBLIC_BASE_URL}/admin`,
+            admin_url: `${baseUrl}/admin`,
+            checkout_url: `${baseUrl}/checkout`,
+            checkout_url_discount: `${baseUrl}/checkout?discount=true`,
             message: "", // Empty for template trigger
         };
 

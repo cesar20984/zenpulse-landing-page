@@ -70,6 +70,15 @@ export async function GET() {
             settings.push(newSetting);
         }
 
+        // Seed discount amount
+        const discountSetting = settings.find(s => s.key === "discount_amount");
+        if (!discountSetting) {
+            const newSetting = await prisma.globalSetting.create({
+                data: { key: "discount_amount", value: "5000" }
+            });
+            settings.push(newSetting);
+        }
+
         return NextResponse.json({ success: true, settings });
     } catch (error) {
         console.error("Error fetching settings:", error);

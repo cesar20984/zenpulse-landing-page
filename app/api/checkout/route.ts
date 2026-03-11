@@ -20,7 +20,8 @@ export async function POST(req: Request) {
             instructions,
             packageContents,
             packagePieces,
-            siteId
+            siteId,
+            isDiscounted
         } = body;
 
         // 0. Basic Validation
@@ -32,7 +33,6 @@ export async function POST(req: Request) {
         }
 
         // 1. Create or Update Customer
-        // Upsert by phone (and email if provided)
         const customer = await prisma.customer.upsert({
             where: { phone: phone },
             update: {
@@ -58,7 +58,26 @@ export async function POST(req: Request) {
             },
         });
 
-        // 3. Create Order
+        // 3. Fetch dynamic settings
+        const settings = await prisma.globalSetting.findMany({
+            where: {
+                key: {
+                    in: ["product_price", "discount_amount", "product_name", "product_description", "product_category_id"]
+                }
+            }
+        });
+
+        let unitPrice = parseInt(settings.find(s => s.key === "product_price")?.value || "19990");
+        const discountAmount = parseInt(settings.find(s => s.key === "discount_amount")?.value || "5000");
+        if (isDiscounted) {
+            unitPrice -= discountAmount;
+        }
+
+        const productName = settings.find(s => s.key === "product_name")?.value || packageContents || "ZenPulse";
+        const productDescription = settings.find(s => s.key === "product_description")?.value || "";
+        const productCategoryId = settings.find(s => s.key === "product_category_id")?.value || "electronics";
+
+        // 4. Create Order
         const order = await prisma.order.create({
             data: {
                 customerId: customer.id,
@@ -66,29 +85,16 @@ export async function POST(req: Request) {
                 siteId: siteId || 'zenpulse-chile',
                 packageContents: packageContents || 'ZenPulse Device',
                 packagePieces: parseInt(packagePieces) || 1,
+                soldPrice: unitPrice,
                 paymentStatus: 'pending',
                 fulfillmentStatus: 'new',
                 orderNumber: new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14),
             },
         });
 
-        // 4. Create Mercado Pago Preference
+        // 5. Create Mercado Pago Preference
         const preference = new Preference(client);
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-
-        // Fetch dynamic settings
-        const settings = await prisma.globalSetting.findMany({
-            where: {
-                key: {
-                    in: ["product_price", "product_name", "product_description", "product_category_id"]
-                }
-            }
-        });
-
-        const unitPrice = parseInt(settings.find(s => s.key === "product_price")?.value || "19990");
-        const productName = settings.find(s => s.key === "product_name")?.value || order.packageContents;
-        const productDescription = settings.find(s => s.key === "product_description")?.value || "";
-        const productCategoryId = settings.find(s => s.key === "product_category_id")?.value || "electronics";
 
         const preferenceResult = await preference.create({
             body: {

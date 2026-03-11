@@ -11,7 +11,8 @@ export default async function CheckoutPage() {
             initialPrice={{
                 raw: priceData.raw,
                 formatted: priceData.formatted,
-                compareAtFormatted: priceData.compareAtFormatted
+                compareAtFormatted: priceData.compareAtFormatted,
+                discountAmountRaw: priceData.discountAmountRaw
             }}
         />
     );

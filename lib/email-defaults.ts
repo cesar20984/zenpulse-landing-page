@@ -144,4 +144,22 @@ Recomendación: Pausa la publicidad inmediatamente para evitar vender más unida
 Revisa el inventario aquí: {{admin_url}}`,
         placeholders: ["product_name", "admin_url"],
     },
+    {
+        slug: "send-discount",
+        name: "Enviar Descuento",
+        subject: "🎁 Un descuento especial para tu descanso",
+        body: `Hola {{customer_name}},
+
+Vimos tu interés en ZenPulse. Queremos ayudarte a mejorar tu descanso, así que te hemos activado un descuento especial y exclusivo.
+
+Tu descuento ya está aplicado en el siguiente enlace:
+{{checkout_url_discount}}
+
+Recuerda que con esto sigues obteniendo Envío Gratis y entrega rápida.
+¡No dejes pasar esta oportunidad de regalarte bienestar!
+
+Saludos,
+El equipo de ZenPulse`,
+        placeholders: ["customer_name", "checkout_url_discount"],
+    },
 ];

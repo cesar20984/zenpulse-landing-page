@@ -1,18 +1,35 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, Truck, CreditCard, ShieldCheck, ArrowRight } from "lucide-react";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
 interface CheckoutContentProps {
-    initialPrice: { raw: number; formatted: string; compareAtFormatted: string };
+    initialPrice: { raw: number; formatted: string; compareAtFormatted: string; discountAmountRaw?: number };
 }
 
 export default function CheckoutContent({ initialPrice }: CheckoutContentProps) {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isDiscounted = searchParams.get("discount") === "true";
+
     const [loading, setLoading] = useState(false);
-    const [price, setPrice] = useState(initialPrice);
+    
+    // Calculate initial price if discount is present
+    const calculatePriceStr = (rawVal: number) => `$${rawVal.toLocaleString('es-CL').replace(/,/g, '.')}`;
+    
+    const [price, setPrice] = useState(() => {
+        let currentRaw = initialPrice.raw;
+        if (isDiscounted && initialPrice.discountAmountRaw) {
+            currentRaw -= initialPrice.discountAmountRaw;
+        }
+        return {
+            ...initialPrice,
+            raw: currentRaw,
+            formatted: calculatePriceStr(currentRaw)
+        };
+    });
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -68,14 +85,21 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                 if (data.success) {
                     const priceSetting = data.settings.find((s: any) => s.key === "product_price");
                     const compareSetting = data.settings.find((s: any) => s.key === "compare_at_price");
+                    const discountSetting = data.settings.find((s: any) => s.key === "discount_amount");
 
                     if (priceSetting) {
-                        const val = parseInt(priceSetting.value);
+                        let val = parseInt(priceSetting.value);
                         const compareVal = compareSetting ? parseInt(compareSetting.value) : 45990;
+                        const discountVal = discountSetting ? parseInt(discountSetting.value) : 5000;
+                        
+                        if (isDiscounted) {
+                            val -= discountVal;
+                        }
+
                         setPrice({
                             raw: val,
-                            formatted: `$${val.toLocaleString('es-CL').replace(/,/g, '.')}`,
-                            compareAtFormatted: `$${compareVal.toLocaleString('es-CL').replace(/,/g, '.')}`
+                            formatted: calculatePriceStr(val),
+                            compareAtFormatted: calculatePriceStr(compareVal)
                         });
                     }
                 }
@@ -96,10 +120,11 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
         setLoading(true);
 
         try {
+            const formDataToSubmit = { ...formData, isDiscounted };
             const res = await fetch("/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(formDataToSubmit),
             });
 
             const data = await res.json();

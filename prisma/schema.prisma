@@ -39,6 +39,7 @@ model Order {
   siteId            String
   packageContents   String
   packagePieces     Int               @default(1)
+  soldPrice         Int               @default(19990)
   paymentStatus     PaymentStatus     @default(pending)
   fulfillmentStatus FulfillmentStatus @default(new)
   isArchived        Boolean           @default(false)
