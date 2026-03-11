@@ -35,7 +35,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
             const minutes = now.getMinutes();
 
             if (day === 6 || (day === 5 && hour >= 12)) {
-                setDeliveryText("Recibe el lunes");
+                setDeliveryText("Entrega en 1 día hábil");
                 return;
             }
 
@@ -315,8 +315,8 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                 </div>
 
                                 <div className="space-y-3 pt-4">
-                                    <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest">
-                                        <Truck className="w-3 h-3" />
+                                    <div className="flex items-center gap-2 text-[10px] text-emerald-600 uppercase font-bold tracking-widest bg-emerald-50 w-fit px-3 py-1.5 rounded-lg border border-emerald-100">
+                                        <Truck className="w-3.5 h-3.5" />
                                         {deliveryText}
                                     </div>
                                     <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest">
