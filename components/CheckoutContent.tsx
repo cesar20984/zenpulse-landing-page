@@ -250,20 +250,32 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                     </div>
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="w-full bg-cta text-white py-4 rounded-2xl font-bold text-lg hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
-                                >
-                                    {loading ? (
-                                        <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
-                                    ) : (
-                                        <>
-                                            Pagar con Mercado Pago
-                                            <ArrowRight className="w-5 h-5" />
-                                        </>
-                                    )}
-                                </button>
+                                <div className="space-y-4">
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="w-full bg-cta text-white py-4 rounded-2xl font-bold text-lg hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+                                    >
+                                        {loading ? (
+                                            <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
+                                        ) : (
+                                            <>
+                                                Proceder al Pago Seguro
+                                                <ArrowRight className="w-5 h-5" />
+                                            </>
+                                        )}
+                                    </button>
+                                    
+                                    <div className="flex flex-col items-center gap-1.5 pt-1">
+                                        <div className="flex gap-3 text-text/30 justify-center">
+                                            <CreditCard className="w-5 h-5" />
+                                            <ShieldCheck className="w-5 h-5" />
+                                        </div>
+                                        <p className="text-[11px] text-text/50 font-medium text-center">
+                                            Aceptamos Tarjetas de Crédito, Débito o saldo en Mercado Pago
+                                        </p>
+                                    </div>
+                                </div>
 
                                 <div className="space-y-3 pt-4">
                                     <div className="flex items-center gap-2 text-[10px] text-text/40 uppercase font-bold tracking-widest">
