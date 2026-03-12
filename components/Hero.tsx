@@ -68,10 +68,10 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                             <span className="text-emerald-700 text-[10px] font-bold uppercase tracking-[0.2em]">Envío GRATIS Incluido</span>
                         </div>
                         <h1 className="heading-1 mb-6 text-text">
-                            Apaga la ansiedad, el estrés y el insomnio con <span className="text-primary italic">pulsos calibrados</span>
+                            Relájate en minutos, <span className="text-primary italic">sin complicaciones</span>.
                         </h1>
                         <p className="text-xl text-text/80 mb-4 max-w-xl mx-auto md:mx-0">
-                            {productName} es un dispositivo portátil diseñado para calmar tu sistema nervioso. A través de micro-pulsos en la palma de tu mano, desactiva la ansiedad diaria y te prepara para un descanso profundo y reparador.
+                            {productName} aplica pulsos suaves en la palma de tu mano para bajar la ansiedad y entrar en un estado de mayor calma, apagando el estrés y el insomnio.
                         </p>
 
                         <div className="mb-6 text-center md:text-left flex items-center gap-4">
