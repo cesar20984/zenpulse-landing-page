@@ -1,20 +1,16 @@
 export default function Benefits() {
     const items = [
         {
-            title: "Relajación antes de dormir",
-            desc: "Te da un estímulo rítmico que facilita bajar la activación del día.",
+            title: "Elimina el Insomnio",
+            desc: "El micro-pulso rítmico 'engaña' a tu cerebro para apagar la hiperactividad mental, garantizando un sueño profundo y reparador.",
         },
         {
-            title: "Rutina simple",
-            desc: "No necesitas apps. No necesitas técnicas complejas. Solo 15 minutos.",
+            title: "Desactiva la Ansiedad",
+            desc: "Detiene los bucles de ansiedad mediante la estimulación del nervio vago y la regulación táctil de tu sistema nervioso.",
         },
         {
-            title: "Pausas durante el día",
-            desc: "También puedes usarlo para una pausa corta cuando estás saturado.",
-        },
-        {
-            title: "Envío GRATIS",
-            desc: "Sin costos sorpresa. El envío a todo Santiago está incluido en el precio.",
+            title: "Reduce el Estrés Diario",
+            desc: "Actúa como un botón de 'reinicio' para tu mente. Tómate 15 minutos al día para bajar tu cortisol y recuperar el control.",
         }
     ];
 

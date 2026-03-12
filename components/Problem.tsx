@@ -1,14 +1,14 @@
 export default function Problem() {
     const items = [
-        "Te acuestas y tu mente sigue corriendo.",
-        "Estás cansado, pero no logras relajarte.",
-        "Quieres una rutina simple sin pastillas."
+        "La ansiedad te paraliza en tu día a día o no te deja dormir por las noches.",
+        "El estrés acumulado no te permite desconectar ni relajar el cuerpo.",
+        "Sufres de insomnio y quieres recuperar el control sin depender de pastillas o químicos."
     ];
 
     return (
         <section className="section-container py-16 md:py-20">
             <div className="max-w-2xl mx-auto text-center">
-                <h2 className="heading-2 mb-10">Si esto te pasa, ZenPulse es para ti</h2>
+                <h2 className="heading-2 mb-10">Si padeces de esto, ZenPulse es tu solución definitiva</h2>
                 <div className="space-y-4">
                     {items.map((item, i) => (
                         <div

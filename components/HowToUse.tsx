@@ -4,19 +4,19 @@ export default function HowToUse() {
     const steps = [
         {
             title: "Colócalo en la palma",
-            desc: "Ajusta la correa para que el contacto quede firme en el centro de tu mano."
+            desc: "Sujétalo firmemente de manera que el emisor de pulsos quede en el centro de tu mano izquierda (para relajar) o derecha (para estimular)."
         },
         {
-            title: "Enciende y elige modo",
-            desc: "Modo noche o modo día."
+            title: "Activa el modo adecuado",
+            desc: "Usa el modo 'Relajar' (luz azul) para insomnio o ansiedad aguda, y modo 'Activar' (luz naranja) para recuperar la concentración."
         },
         {
-            title: "Ajusta intensidad",
-            desc: "Sube o baja hasta que se sienta agradable. Más fuerte no es mejor."
+            title: "Calibra la intensidad",
+            desc: "Aumenta o disminuye los pulsos hasta sentir un latido claro y cómodo. No busques que moleste, busca que calme."
         },
         {
-            title: "Úsalo 15 minutos",
-            desc: "Úsalo antes de dormir. Para rutina de sueño, pruébalo 7 a 14 días seguidos."
+            title: "Apaga tu mente en 15 minutos",
+            desc: "Se apagará solo tras 15 minutos. Úsalo ante un episodio de estrés, o 15 min antes de dormir todas las noches para resultados definitivos."
         }
     ];
 

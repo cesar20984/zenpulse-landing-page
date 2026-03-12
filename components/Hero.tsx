@@ -53,7 +53,7 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                 <div className="max-w-4xl mx-auto mb-16 rounded-[2.5rem] overflow-hidden shadow-soft border border-primary/10 bg-white/40 p-2 animate-in fade-in slide-in-from-top-4 duration-1000">
                     <Image
                         src="/images/hero-product.webp"
-                        alt="ZenPulse - Tu compañero de descanso"
+                        alt="ZenPulse - Alivio del estrés, ansiedad e insomnio"
                         width={1200}
                         height={500}
                         className="w-full h-auto rounded-[2rem] object-cover aspect-[21/9] md:aspect-[3/1]"
@@ -68,10 +68,10 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                             <span className="text-emerald-700 text-[10px] font-bold uppercase tracking-[0.2em]">Envío GRATIS Incluido</span>
                         </div>
                         <h1 className="heading-1 mb-6 text-text">
-                            Relájate antes de dormir con <span className="text-primary italic">pulsos suaves</span> en la palma
+                            Apaga la ansiedad, el estrés y el insomnio con <span className="text-primary italic">pulsos calibrados</span>
                         </h1>
                         <p className="text-xl text-text/80 mb-4 max-w-xl mx-auto md:mx-0">
-                            {productName} es un dispositivo portátil que entrega un estímulo rítmico suave en la mano. Te ayuda a bajar revoluciones y entrar en modo descanso.
+                            {productName} es un dispositivo portátil diseñado para calmar tu sistema nervioso. A través de micro-pulsos en la palma de tu mano, desactiva la ansiedad diaria y te prepara para un descanso profundo y reparador.
                         </p>
 
                         <div className="mb-6 text-center md:text-left flex items-center gap-4">
@@ -176,7 +176,7 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                         <div className="relative z-10 w-full aspect-square md:aspect-auto">
                             <Image
                                 src="/images/hero.webp"
-                                alt="Persona relajándose con ZenPulse antes de dormir"
+                                alt="Persona aliviando el estrés y ansiedad con ZenPulse"
                                 width={800}
                                 height={800}
                                 priority

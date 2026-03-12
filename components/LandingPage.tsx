@@ -93,10 +93,10 @@ export default function LandingPage({ initialPrice, initialCompareAtPrice, initi
             <footer className="bg-background pt-16 pb-8 text-center">
                 <div className="max-w-2xl mx-auto px-4">
                     <h2 className="text-3xl md:text-4xl font-heading font-bold text-text mb-4">
-                        Listo. 15 minutos. A dormir.
+                        Despídete de la ansiedad y el insomnio.
                     </h2>
                     <p className="text-text/60 mb-10">
-                        Sin complicaciones. Sin pastillas. Solo un estímulo suave y tu rutina de descanso.
+                        Sin clínicas. Sin químicos nocivos ni dependencia a pastillas. La ciencia del control del estrés, directamente en tu mano.
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-text/30 mb-6">

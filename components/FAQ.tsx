@@ -8,15 +8,15 @@ export default function FAQ() {
     const faqs = [
         {
             q: "¿Duele?",
-            a: "No debería. Debe sentirse suave. Ajusta la intensidad hasta que sea agradable."
+            a: "No. El latido debe sentirse suave y tranquilizador. Ajusta la intensidad hasta encontrar tu punto de calma perfecta."
         },
         {
-            q: "¿Cuándo se nota?",
-            a: "Algunas personas sienten relajación inmediata. Para establecer una rutina, úsalo 7 a 14 días."
+            q: "¿Cuándo notarás los cambios?",
+            a: "El nervio vago reacciona casi instantáneamente reduciendo los nervios y la ansiedad en minutos. Para curar el insomnio desde la raíz, debes usarlo cada noche durante 7 a 14 días."
         },
         {
-            q: "¿Puedo usarlo de día?",
-            a: "Sí. Úsalo en pausas cortas cuando quieras bajar revoluciones."
+            q: "¿Sirve para ataques de pánico o ansiedad de día?",
+            a: "Absolutamente. Es discreto y cabe en el bolsillo. Ante un episodio de estrés o ansiedad aguda, úsalo en tu mano izquierda y nota cómo regula físicamente tu ritmo cardíaco."
         },
         {
             q: "¿Cómo se carga?",

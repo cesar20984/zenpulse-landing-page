@@ -11,21 +11,21 @@ export default function ProductDetails() {
                         <div className="p-6 bg-white rounded-2xl border border-primary/5 shadow-sm">
                             <h3 className="font-bold text-lg text-text mb-2">Qué es</h3>
                             <p className="text-text/70 leading-relaxed">
-                                Es un dispositivo de bienestar que entrega micro-pulsos rítmicos en el centro de la palma.
+                                Es una herramienta neuro-estimulante portátil que entrega micro-pulsos calibrados hacia tu sistema nervioso central. Al sujetarlo, estos pulsos rompen el ciclo de la ansiedad y el estrés casi instantáneamente.
                             </p>
                         </div>
 
                         <div className="p-6 bg-white rounded-2xl border border-primary/5 shadow-sm">
                             <h3 className="font-bold text-lg text-text mb-2">Qué se siente</h3>
                             <p className="text-text/70 leading-relaxed">
-                                Sentirás un cosquilleo suave y rítmico. No debe doler. Tú controlas la intensidad.
+                                Sentirás un latido suave y rítmico en tu mano que le envía una señal física y directa a tu cerebro para apagar la alerta, relajar tu cuerpo y prepararlo para dormir o enfocarse.
                             </p>
                         </div>
 
                         <div className="p-6 bg-amber-50/50 rounded-2xl border border-amber-100">
                             <h3 className="font-bold text-lg text-text mb-2">Qué NO es</h3>
                             <p className="text-text/70 leading-relaxed">
-                                No es un dispositivo médico. No reemplaza diagnóstico ni tratamiento. Si tienes un problema de sueño severo o persistente, busca ayuda profesional.
+                                No es magia ni medicina convencional. Es biotecnología táctil aplicada a tu descanso y enfoque. Si tienes trastornos psiquiátricos severos, consúltalo siempre con tu médico especialista en salud mental.
                             </p>
                         </div>
                     </div>
