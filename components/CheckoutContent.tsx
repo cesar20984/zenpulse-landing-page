@@ -320,14 +320,14 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full bg-[#009EE3] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#008ACA] hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+                                        className="w-full bg-[#009EE3] text-white py-3.5 md:py-4 px-2 rounded-2xl font-bold text-base md:text-lg hover:bg-[#008ACA] hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
                                     >
                                         {loading ? (
                                             <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
                                         ) : (
                                             <>
-                                                Continuar a Mercado Pago
-                                                <ArrowRight className="w-5 h-5" />
+                                                <span className="whitespace-nowrap">Continuar a Mercado Pago</span>
+                                                <ArrowRight className="w-5 h-5 flex-shrink-0" />
                                             </>
                                         )}
                                     </button>
@@ -342,18 +342,19 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                         </p>
                                     </div>
 
-                                    <div className="mt-2 p-4 bg-sky-50 rounded-xl border border-sky-100">
-                                        <div className="flex flex-col items-center justify-center gap-2 mb-2">
+                                    <div className="mt-4 p-4 bg-sky-50 border-2 border-sky-200 rounded-2xl relative shadow-sm overflow-hidden">
+                                        <div className="absolute top-0 left-0 w-1.5 h-full bg-[#009EE3]"></div>
+                                        <div className="flex justify-center mb-3">
                                             <Image
                                                 src="/images/qbicshop-logo.webp"
                                                 alt="Vendido por QBICSHOP"
-                                                width={100}
-                                                height={24}
-                                                className="h-6 w-auto object-contain opacity-80 mix-blend-multiply"
+                                                width={70}
+                                                height={18}
+                                                className="h-4 w-auto object-contain mix-blend-multiply opacity-50"
                                             />
                                         </div>
-                                        <p className="text-xs text-sky-800 font-medium text-center leading-snug">
-                                            Serás redirigido a Mercado Pago. El cobro puede figurar como <strong>Qbicshop</strong>. Tu compra corresponde a ZenPulse.
+                                        <p className="text-[13px] md:text-sm text-sky-900 font-medium text-center leading-snug">
+                                            Serás redirigido a Mercado Pago. El cobro puede figurar como <strong className="bg-white px-2 py-0.5 rounded shadow-sm mx-0.5 border border-sky-100">Qbicshop</strong>. <br className="hidden md:block" />Tu compra corresponde a ZenPulse.
                                         </p>
                                     </div>
                                 </div>
