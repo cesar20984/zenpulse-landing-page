@@ -320,7 +320,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full bg-cta text-white py-4 rounded-2xl font-bold text-lg hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+                                        className="w-full bg-[#009EE3] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#008ACA] hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
                                     >
                                         {loading ? (
                                             <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
@@ -340,8 +340,20 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                         <p className="text-[11px] text-text/50 font-medium text-center leading-relaxed">
                                             Paga de forma segura con tarjeta de crédito, débito o tu cuenta de Mercado Pago.
                                         </p>
-                                        <p className="text-[10px] text-text/40 font-medium text-center mt-2 px-2 bg-slate-50 py-2 rounded-lg border border-slate-100">
-                                            Serás redirigido a Mercado Pago. El cobro puede figurar como Qbicshop. Tu compra corresponde a ZenPulse.
+                                    </div>
+
+                                    <div className="mt-2 p-4 bg-sky-50 rounded-xl border border-sky-100">
+                                        <div className="flex flex-col items-center justify-center gap-2 mb-2">
+                                            <Image
+                                                src="/images/qbicshop-logo.webp"
+                                                alt="Vendido por QBICSHOP"
+                                                width={100}
+                                                height={24}
+                                                className="h-6 w-auto object-contain opacity-80 mix-blend-multiply"
+                                            />
+                                        </div>
+                                        <p className="text-xs text-sky-800 font-medium text-center leading-snug">
+                                            Serás redirigido a Mercado Pago. El cobro puede figurar como <strong>Qbicshop</strong>. Tu compra corresponde a ZenPulse.
                                         </p>
                                     </div>
                                 </div>
