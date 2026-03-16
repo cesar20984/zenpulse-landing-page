@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { CheckCircle2, Truck, CreditCard, ShieldCheck, ArrowRight } from "lucide-react";
 import { COMUNAS_SANTIAGO } from "@/lib/comunas";
 
@@ -156,10 +157,13 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                     <button type="button" onClick={() => router.push("/")} className="text-2xl font-bold text-text">
                         Zen<span className="text-primary italic">Pulse</span>
                     </button>
-                    <div className="flex items-center gap-2 text-text/60 text-sm font-medium">
-                        <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                        Pago Seguro SSL
-                    </div>
+                    <Image 
+                        src="/images/qbicshop-logo.webp"
+                        alt="Vendido por QBICSHOP con Garantía MercadoLibre"
+                        width={160}
+                        height={40}
+                        className="h-7 md:h-9 w-auto object-contain opacity-90"
+                    />
                 </div>
             </header>
 
@@ -313,6 +317,15 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                 </div>
 
                                 <div className="space-y-4">
+                                    <div className="flex flex-col items-center justify-center pt-2">
+                                        <Image
+                                            src="/images/qbicshop-logo.webp"
+                                            alt="Vendido y garantizado por QBICSHOP"
+                                            width={250}
+                                            height={60}
+                                            className="h-14 w-auto object-contain mx-auto"
+                                        />
+                                    </div>
                                     <button
                                         type="submit"
                                         disabled={loading}

@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
 import ProductDetails from "@/components/ProductDetails";
@@ -61,6 +62,13 @@ export default function LandingPage({ initialPrice, initialCompareAtPrice, initi
                     <Link href="/" className="text-2xl font-bold text-text">
                         {productName}
                     </Link>
+                    <Image 
+                        src="/images/qbicshop-logo.webp"
+                        alt="Vendido por QBICSHOP con Garantía MercadoLibre"
+                        width={180}
+                        height={40}
+                        className="h-7 md:h-10 w-auto object-contain opacity-90"
+                    />
                 </div>
             </header>
 
