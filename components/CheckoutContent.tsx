@@ -321,7 +321,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                     </div>
                                 </div>
 
-                                <div className="space-y-3 pt-4">
+                                <div className="space-y-3 pt-4 flex flex-col items-center">
                                     <div className="flex items-center gap-2 text-[10px] text-emerald-600 uppercase font-bold tracking-widest bg-emerald-50 w-fit px-3 py-1.5 rounded-lg border border-emerald-100">
                                         <Truck className="w-3.5 h-3.5" />
                                         Envío Prioritario Gratis
