@@ -317,15 +317,6 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="flex flex-col items-center justify-center pt-2">
-                                        <Image
-                                            src="/images/qbicshop-logo.webp"
-                                            alt="Vendido y garantizado por QBICSHOP"
-                                            width={250}
-                                            height={60}
-                                            className="h-14 w-auto object-contain mx-auto"
-                                        />
-                                    </div>
                                     <button
                                         type="submit"
                                         disabled={loading}
@@ -335,7 +326,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                             <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
                                         ) : (
                                             <>
-                                                Pagar en Mercadopago
+                                                Continuar a Mercado Pago
                                                 <ArrowRight className="w-5 h-5" />
                                             </>
                                         )}
@@ -347,10 +338,10 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                             <ShieldCheck className="w-5 h-5" />
                                         </div>
                                         <p className="text-[11px] text-text/50 font-medium text-center leading-relaxed">
-                                            Puedes pagar de forma segura con tarjeta de crédito, débito, o con tu cuenta de Mercado Pago.
+                                            Paga de forma segura con tarjeta de crédito, débito o tu cuenta de Mercado Pago.
                                         </p>
                                         <p className="text-[10px] text-text/40 font-medium text-center mt-2 px-2 bg-slate-50 py-2 rounded-lg border border-slate-100">
-                                            Serás redirigido a Mercado Pago para completar tu pago de forma segura. El cobro aparecerá a nombre de <strong>QBICSHOP</strong>. Tu compra corresponde a ZenPulse.
+                                            Serás redirigido a Mercado Pago. El cobro puede figurar como Qbicshop. Tu compra corresponde a ZenPulse.
                                         </p>
                                     </div>
                                 </div>
