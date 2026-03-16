@@ -26,7 +26,7 @@ export default function Hero({ price = "$22.990", compareAtPrice = "$45.990", pr
                 }
                 timeStr += `${remainingMinutes} mins`;
                 
-                setDeliveryText(`Recibes hoy si compras en los próximos ${timeStr}`);
+                setDeliveryText(`Recíbelo hoy si compras en las próximas ${timeStr}`);
             } else {
                 setDeliveryText(null); // Hide message entirely outside these windows
             }
