@@ -322,7 +322,7 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                             <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
                                         ) : (
                                             <>
-                                                Proceder al Pago Seguro
+                                                Pagar en Mercadopago
                                                 <ArrowRight className="w-5 h-5" />
                                             </>
                                         )}
@@ -333,8 +333,11 @@ export default function CheckoutContent({ initialPrice }: CheckoutContentProps) 
                                             <CreditCard className="w-5 h-5" />
                                             <ShieldCheck className="w-5 h-5" />
                                         </div>
-                                        <p className="text-[11px] text-text/50 font-medium text-center">
-                                            Aceptamos Tarjetas de Crédito, Débito o saldo en Mercado Pago
+                                        <p className="text-[11px] text-text/50 font-medium text-center leading-relaxed">
+                                            Puedes pagar de forma segura con tarjeta de crédito, débito, o con tu cuenta de Mercado Pago.
+                                        </p>
+                                        <p className="text-[10px] text-text/40 font-medium text-center mt-2 px-2 bg-slate-50 py-2 rounded-lg border border-slate-100">
+                                            Serás redirigido a Mercado Pago para completar tu pago de forma segura. El cobro aparecerá a nombre de <strong>QBICSHOP</strong>. Tu compra corresponde a ZenPulse.
                                         </p>
                                     </div>
                                 </div>
